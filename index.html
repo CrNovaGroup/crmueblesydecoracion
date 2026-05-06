@@ -3,197 +3,319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CR Muebles y Decoración</title>
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<title>CR Muebles y Decoración — Pereira</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
   :root {
     --gold: #C9A96E;
-    --dark: #1a1a1a;
-    --cream: #F5F0E8;
-    --brown: #6B4C2A;
+    --gold-light: #e0c898;
+    --dark: #141210;
+    --dark2: #1e1b17;
+    --cream: #F7F2EA;
+    --warm: #2a2218;
     --light: #ffffff;
-    --gray: #888;
+    --text-muted: #888;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-  body { font-family: 'Lato', sans-serif; background: var(--light); color: var(--dark); }
 
-  /* NAV */
+  * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ========================
+     NAV
+  ======================== */
   nav {
     position: fixed; top: 0; width: 100%; z-index: 1000;
-    background: rgba(26,26,26,0.95); backdrop-filter: blur(10px);
+    background: rgba(20,18,16,0.96);
+    backdrop-filter: blur(16px);
     display: flex; justify-content: space-between; align-items: center;
-    padding: 18px 60px; border-bottom: 1px solid rgba(201,169,110,0.3);
+    padding: 20px 64px;
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+    transition: padding 0.3s;
   }
-  .logo { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.5rem; font-weight: 700; letter-spacing: 1px; }
-  .logo span { color: var(--light); font-weight: 400; }
-  .nav-links { display: flex; gap: 35px; list-style: none; }
-  .nav-links a { color: #ccc; text-decoration: none; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; transition: color 0.3s; }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold); font-size: 1.4rem; font-weight: 600; letter-spacing: 0.5px;
+  }
+  .logo span { color: rgba(255,255,255,0.75); font-weight: 300; }
+  .nav-links { display: flex; gap: 38px; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.6); text-decoration: none;
+    font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase;
+    transition: color 0.25s; font-weight: 500;
+  }
   .nav-links a:hover { color: var(--gold); }
-  
-  /* HERO */
+  .nav-cta {
+    background: var(--gold); color: var(--dark) !important;
+    padding: 9px 22px; font-weight: 600 !important;
+    transition: background 0.25s !important;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--dark) !important; }
+
+  /* ========================
+     HERO
+  ======================== */
   .hero {
-    height: 100vh; position: relative; display: flex; align-items: center;
-    justify-content: center; background: linear-gradient(135deg,#1a1a1a 0%,#2d2010 50%,#1a1a1a 100%);
+    min-height: 100vh; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--dark);
     overflow: hidden;
   }
   .hero-bg {
     position: absolute; inset: 0;
     background: url('https://res.cloudinary.com/dnqzhisyj/image/upload/v1776467032/WhatsApp_Image_2026-03-18_at_4.36.38_PM_ypxfgm.jpg') center/cover;
-    opacity: .2;
+    opacity: 0.18;
+    transform: scale(1.05);
+    animation: heroScale 12s ease-in-out infinite alternate;
   }
-  .hero-content { position: relative; text-align: center; padding: 20px; z-index: 1; }
-  .hero-badge {
-    display: inline-block; border: 1px solid var(--gold); color: var(--gold);
-    padding: 6px 20px; font-size: .75rem; letter-spacing: 3px;
-    text-transform: uppercase; margin-bottom: 25px;
+  @keyframes heroScale { from { transform: scale(1.05); } to { transform: scale(1.0); } }
+
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(20,18,16,0.5) 0%, rgba(20,18,16,0.2) 50%, rgba(20,18,16,0.85) 100%);
   }
+  .hero-content {
+    position: relative; text-align: center; padding: 20px; z-index: 1;
+    max-width: 760px;
+    animation: fadeUp 1s ease both;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    color: var(--gold); font-size: 0.72rem; letter-spacing: 4px;
+    text-transform: uppercase; margin-bottom: 28px; font-weight: 500;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; width: 30px; height: 1px; background: var(--gold); opacity: 0.6;
+  }
+
   .hero h1 {
-    font-family: 'Playfair Display', serif; color: var(--light);
-    font-size: clamp(2.2rem, 5.5vw, 4.5rem); line-height: 1.1; margin-bottom: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--light);
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    line-height: 1.08; margin-bottom: 24px; font-weight: 300;
   }
-  .hero h1 span { color: var(--gold); }
-  .hero p { color: #bbb; font-size: 1rem; max-width: 580px; margin: 0 auto 40px; line-height: 1.8; font-weight: 300; }
-  .hero-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero h1 strong { font-weight: 600; }
+
+  .hero-sub {
+    color: rgba(255,255,255,0.65); font-size: 1.05rem;
+    max-width: 540px; margin: 0 auto 16px; line-height: 1.75; font-weight: 300;
+  }
+  .hero-promise {
+    display: inline-block; color: var(--gold-light);
+    font-size: 0.82rem; letter-spacing: 1px; margin-bottom: 40px;
+    border-bottom: 1px solid rgba(201,169,110,0.3); padding-bottom: 4px;
+  }
+  .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
   .btn-gold {
-    background: var(--gold); color: var(--dark); padding: 14px 35px;
-    text-decoration: none; font-weight: 700; font-size: .85rem;
-    letter-spacing: 2px; text-transform: uppercase; transition: all .3s;
+    background: var(--gold); color: var(--dark); padding: 15px 38px;
+    text-decoration: none; font-weight: 600; font-size: 0.82rem;
+    letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s;
+    display: inline-block;
   }
-  .btn-gold:hover { background: #b8915a; transform: translateY(-2px); }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
   .btn-outline {
-    border: 1px solid var(--gold); color: var(--gold); padding: 14px 35px;
-    text-decoration: none; font-size: .85rem; letter-spacing: 2px;
-    text-transform: uppercase; transition: all .3s;
+    border: 1px solid rgba(201,169,110,0.5); color: var(--gold);
+    padding: 15px 38px; text-decoration: none; font-size: 0.82rem;
+    letter-spacing: 1.5px; text-transform: uppercase; transition: all 0.3s;
+    display: inline-block;
   }
-  .btn-outline:hover { background: rgba(201,169,110,.1); }
-  
-  /* Scroll Indicator */
+  .btn-outline:hover { border-color: var(--gold); background: rgba(201,169,110,0.08); }
+
   .scroll-indicator {
-    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-    color: var(--gold); display: flex; flex-direction: column;
-    align-items: center; gap: 8px; font-size: .7rem; letter-spacing: 2px;
-    text-transform: uppercase;
+    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
+    color: rgba(201,169,110,0.6); display: flex; flex-direction: column;
+    align-items: center; gap: 8px; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
   }
   .scroll-line {
-    width: 1px; height: 50px;
+    width: 1px; height: 48px;
     background: linear-gradient(to bottom, var(--gold), transparent);
-    animation: scrollAnim 2s infinite;
+    animation: pulse 2s infinite;
   }
-  @keyframes scrollAnim { 0%,100%{opacity:1} 50%{opacity:.2} }
+  @keyframes pulse { 0%,100%{opacity:0.8} 50%{opacity:0.2} }
 
-  /* General Sections */
-  section { padding: 90px 60px; }
+  /* ========================
+     PAIN POINTS BAND
+  ======================== */
+  .pain-band {
+    background: var(--cream);
+    padding: 64px 64px;
+  }
+  .pain-band-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: center;
+  }
+  .pain-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.9rem, 3vw, 2.8rem); line-height: 1.2;
+    font-weight: 400; color: var(--dark);
+  }
+  .pain-title em { font-style: italic; color: #8B6840; }
+  .pain-items { display: flex; flex-direction: column; gap: 22px; }
+  .pain-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 20px; background: white;
+    border-left: 3px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .pain-item:hover { border-left-color: var(--gold); }
+  .pain-check {
+    width: 32px; height: 32px; background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: var(--dark); font-size: 0.8rem;
+  }
+  .pain-item p { font-size: 0.92rem; line-height: 1.6; color: #444; font-weight: 400; }
+  .pain-item p strong { color: var(--dark); display: block; margin-bottom: 2px; }
+
+  /* ========================
+     GENERAL SECTIONS
+  ======================== */
+  section { padding: 96px 64px; }
   .section-label {
-    color: var(--gold); font-size: .75rem; letter-spacing: 4px;
-    text-transform: uppercase; margin-bottom: 12px;
+    color: var(--gold); font-size: 0.7rem; letter-spacing: 5px;
+    text-transform: uppercase; margin-bottom: 10px; font-weight: 500;
   }
   .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem); line-height: 1.2; margin-bottom: 20px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 18px; font-weight: 400;
   }
-  .section-line { width: 60px; height: 2px; background: var(--gold); margin-bottom: 40px; }
+  .section-line { width: 48px; height: 2px; background: var(--gold); margin-bottom: 40px; }
 
-  /* About */
-  .about { background: var(--cream); }
-  .about-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
-    align-items: center; max-width: 1100px; margin: 0 auto;
-  }
-  .about-img { position: relative; }
-  .about-img img { width: 100%; height: 500px; object-fit: cover; }
-  .about-img-badge {
-    position: absolute; bottom: -20px; right: -20px;
-    background: var(--gold); color: var(--dark); padding: 25px; text-align: center;
-  }
-  .about-img-badge .num {
-    font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; display: block;
-  }
-  .about-img-badge .txt { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; }
-  .about-text p { color: #555; line-height: 1.9; font-size: 1rem; margin-bottom: 20px; }
-  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
-  .feature { display: flex; align-items: center; gap: 12px; }
-  .feature-icon {
-    width: 40px; height: 40px; background: var(--gold);
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.1rem;
-  }
-  .feature span { font-size: 0.85rem; color: #444; font-weight: 600; }
-
-  /* Services */
-  .services { background: var(--dark); }
+  /* ========================
+     SERVICES (BENEFIT-FOCUSED)
+  ======================== */
+  .services { background: var(--dark2); }
   .services .section-title { color: var(--light); }
+  .services-intro { color: rgba(255,255,255,0.55); font-size: 1rem; max-width: 600px; line-height: 1.8; margin-bottom: 56px; font-weight: 300; }
   .services-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
     max-width: 1100px; margin: 0 auto;
   }
   .service-card {
-    background: #222; padding: 40px 30px;
-    border-top: 3px solid transparent; transition: all 0.3s; cursor: default;
+    background: rgba(255,255,255,0.04); padding: 40px 32px;
+    border-top: 2px solid transparent;
+    transition: all 0.35s; cursor: default; position: relative; overflow: hidden;
   }
-  .service-card:hover .service-icon { transform: scale(1.15); transition: 0.3s; }
-  .service-icon { font-size: 26px; color: #C9A96E; margin-bottom: 15px; display: inline-block; }
-  .service-card h3 { font-family: 'Playfair Display', serif; color: var(--light); font-size: 1.3rem; margin-bottom: 15px; }
-  .service-card p { color: #888; font-size: 0.9rem; line-height: 1.7; }
+  .service-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(201,169,110,0.05), transparent);
+    opacity: 0; transition: opacity 0.35s;
+  }
+  .service-card:hover { border-top-color: var(--gold); }
+  .service-card:hover::before { opacity: 1; }
+  .service-icon { font-size: 22px; color: var(--gold); margin-bottom: 18px; display: inline-block; }
+  .service-card h3 {
+    font-family: 'Cormorant Garamond', serif; color: var(--light);
+    font-size: 1.25rem; margin-bottom: 10px; font-weight: 600;
+  }
+  .service-card .service-benefit {
+    color: var(--gold-light); font-size: 0.78rem; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 12px; font-weight: 500;
+  }
+  .service-card p { color: rgba(255,255,255,0.5); font-size: 0.88rem; line-height: 1.75; }
 
-  /* Botón configurador */
-  .config-btn-container {
-    text-align: center;
-    margin-top: 50px;
-  }
+  .config-btn-container { text-align: center; margin-top: 56px; }
   .btn-config {
-    display: inline-block;
-    padding: 16px 36px;
-    background: #C4A46B;
-    color: #1E1C18;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-decoration: none;
-    border-radius: 2px;
-    transition: background 0.2s, transform 0.2s;
+    display: inline-block; padding: 15px 36px;
+    background: transparent; border: 1px solid rgba(201,169,110,0.5);
+    color: var(--gold); font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 1.5px;
+    text-transform: uppercase; text-decoration: none;
+    transition: all 0.3s;
   }
-  .btn-config:hover {
-    background: #D4B47B;
-    transform: translateY(-2px);
+  .btn-config:hover { background: rgba(201,169,110,0.1); border-color: var(--gold); }
+
+  /* ========================
+     PROCESS
+  ======================== */
+  .process { background: var(--cream); }
+  .process-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .process-step { padding: 36px 28px; background: white; position: relative; }
+  .step-num {
+    font-family: 'Cormorant Garamond', serif; font-size: 3.5rem;
+    color: rgba(201,169,110,0.15); font-weight: 600; line-height: 1;
+    margin-bottom: 16px; display: block;
+  }
+  .process-step h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; margin-bottom: 10px; font-weight: 600;
+  }
+  .process-step p { font-size: 0.85rem; color: #666; line-height: 1.7; }
+  .process-step-connector {
+    position: absolute; top: 52px; right: -1px;
+    width: 2px; height: 24px; background: var(--gold); opacity: 0.3;
   }
 
-  /* Design Section */
-  .design-full { width: 100%; height: 100vh; margin: 0; padding: 0; }
-  .design-iframe { width: 100%; height: 100%; border: none; display: block; }
+  /* ========================
+     ABOUT (Client-first)
+  ======================== */
+  .about { background: var(--light); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 90px;
+    align-items: center; max-width: 1100px; margin: 0 auto;
+  }
+  .about-img { position: relative; }
+  .about-img img { width: 100%; height: 520px; object-fit: cover; }
+  .about-img-badge {
+    position: absolute; bottom: -24px; right: -24px;
+    background: var(--gold); color: var(--dark); padding: 28px 32px; text-align: center;
+  }
+  .about-img-badge .num {
+    font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 600; display: block; line-height: 1;
+  }
+  .about-img-badge .txt { font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; display: block; }
 
-  /* Gallery */
-  .gallery { background: var(--light); }
+  .about-text .section-title { color: var(--dark); }
+  .about-text p { color: #555; line-height: 1.9; font-size: 0.95rem; margin-bottom: 18px; font-weight: 300; }
+  .guarantee-box {
+    border: 1px solid rgba(201,169,110,0.3); padding: 22px 24px;
+    margin-top: 28px; background: rgba(201,169,110,0.04);
+  }
+  .guarantee-box p {
+    font-size: 0.88rem; color: #555; margin: 0; line-height: 1.7;
+  }
+  .guarantee-box strong { color: var(--dark); }
+
+  /* ========================
+     GALLERY
+  ======================== */
+  .gallery { background: var(--dark); padding-bottom: 0; }
+  .gallery .section-title { color: var(--light); }
   .gallery-header {
     max-width: 1100px; margin: 0 auto 50px;
-    display: flex; justify-content: space-between; align-items: flex-end;
-    flex-wrap: wrap; gap: 20px;
+    display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px;
   }
   .gallery-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px;
     max-width: 1100px; margin: 0 auto;
   }
   .gallery-item {
     overflow: hidden; position: relative; cursor: pointer;
-    background: #eee; aspect-ratio: 4/3;
+    background: #333; aspect-ratio: 4/3;
   }
   .gallery-item.tall { grid-row: span 2; aspect-ratio: auto; }
-  .gallery-item img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform .5s ease; display: block;
-  }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; display: block; }
   .gallery-item.tall img { min-height: 530px; }
-  .gallery-item:hover img { transform: scale(1.06); }
+  .gallery-item:hover img { transform: scale(1.07); }
   .gallery-overlay {
-    position: absolute; inset: 0; background: rgba(26,26,26,0);
-    display: flex; align-items: center; justify-content: center;
-    transition: background .3s;
+    position: absolute; inset: 0; background: rgba(20,18,16,0);
+    display: flex; align-items: center; justify-content: center; transition: background 0.35s;
   }
-  .gallery-item:hover .gallery-overlay { background: rgba(26,26,26,0.35); }
+  .gallery-item:hover .gallery-overlay { background: rgba(20,18,16,0.42); }
   .overlay-icon {
-    color: white; font-size: 1.8rem; opacity: 0; transition: opacity .3s;
-    background: var(--gold); width: 50px; height: 50px;
+    color: white; font-size: 1.5rem; opacity: 0; transition: opacity 0.3s;
+    background: var(--gold); width: 48px; height: 48px;
     display: flex; align-items: center; justify-content: center;
   }
   .gallery-item:hover .overlay-icon { opacity: 1; }
@@ -201,116 +323,134 @@
   /* Lightbox */
   .lightbox {
     display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,.92); z-index: 9999;
+    background: rgba(0,0,0,0.95); z-index: 9999;
     align-items: center; justify-content: center;
   }
   .lightbox.active { display: flex; }
   .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
   .lightbox-close {
     position: absolute; top: 20px; right: 30px;
-    color: white; font-size: 2.5rem; cursor: pointer; line-height: 1;
+    color: white; font-size: 2rem; cursor: pointer; line-height: 1;
+    transition: color 0.2s;
   }
   .lightbox-close:hover { color: var(--gold); }
 
-  /* Stats */
-  .stats { background: var(--gold); padding: 60px; }
+  /* ========================
+     STATS
+  ======================== */
+  .stats { background: var(--gold); padding: 64px; }
   .stats-grid {
     display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 20px; max-width: 1100px; margin: 0 auto; text-align: center;
   }
   .stat-num {
-    font-family: 'Playfair Display', serif; font-size: 2.8rem;
-    font-weight: 700; color: var(--dark);
+    font-family: 'Cormorant Garamond', serif; font-size: 3rem;
+    font-weight: 600; color: var(--dark); line-height: 1;
   }
-  .stat-label {
-    font-size: .78rem; letter-spacing: 2px; text-transform: uppercase;
-    color: rgba(26,26,26,.7); margin-top: 5px;
-  }
+  .stat-label { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(26,26,26,0.65); margin-top: 6px; }
 
-  /* Contact */
-  .contact { background: var(--dark); }
+  /* ========================
+     TESTIMONIAL
+  ======================== */
+  .testimonial { background: var(--cream); padding: 80px 64px; text-align: center; }
+  .testimonial blockquote {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(1.4rem, 2.5vw, 2rem);
+    color: var(--dark); font-weight: 400; font-style: italic;
+    max-width: 780px; margin: 0 auto 24px; line-height: 1.5;
+  }
+  .testimonial cite { font-size: 0.78rem; color: #888; letter-spacing: 2px; text-transform: uppercase; }
+
+  /* ========================
+     CONTACT
+  ======================== */
+  .contact { background: var(--dark2); }
   .contact .section-title { color: var(--light); }
   .contact-grid {
     display: grid; grid-template-columns: 1fr 1fr;
-    gap: 70px; max-width: 1100px; margin: 0 auto; align-items: start;
+    gap: 80px; max-width: 1100px; margin: 0 auto; align-items: start;
   }
-  .contact-info p { color: #aaa; line-height: 1.8; margin-bottom: 35px; }
-  .social-links { display: flex; flex-direction: column; gap: 14px; }
+  .contact-info p { color: rgba(255,255,255,0.5); line-height: 1.9; margin-bottom: 36px; font-size: 0.95rem; font-weight: 300; }
+  .social-links { display: flex; flex-direction: column; gap: 10px; }
   .social-link {
-    display: flex; align-items: center; gap: 15px; text-decoration: none;
-    padding: 16px 22px; border: 1px solid #333; transition: all .3s; color: var(--light);
+    display: flex; align-items: center; gap: 16px; text-decoration: none;
+    padding: 16px 20px; border: 1px solid rgba(255,255,255,0.07); transition: all 0.3s; color: var(--light);
   }
-  .social-link:hover {
-    border-color: var(--gold); background: rgba(201,169,110,.08);
-    transform: translateX(5px);
-  }
-  .social-icon { width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
-  .social-link-info strong { display: block; font-size: .88rem; }
-  .social-link-info span { font-size: .78rem; color: #888; }
+  .social-link:hover { border-color: var(--gold); background: rgba(201,169,110,0.06); transform: translateX(4px); }
+  .social-icon { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--gold); }
+  .social-link-info strong { display: block; font-size: 0.85rem; }
+  .social-link-info span { font-size: 0.75rem; color: #666; }
+
   .contact-form-area h3 {
-    font-family: 'Playfair Display', serif; color: var(--light);
-    font-size: 1.4rem; margin-bottom: 22px;
+    font-family: 'Cormorant Garamond', serif; color: var(--light);
+    font-size: 1.5rem; margin-bottom: 8px; font-weight: 400;
   }
-  .form-row { margin-bottom: 18px; }
+  .contact-form-area .form-subtitle { color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-bottom: 28px; line-height: 1.6; }
+  .form-row { margin-bottom: 16px; }
   .form-row label {
-    display: block; color: #888; font-size: .78rem;
+    display: block; color: rgba(255,255,255,0.4); font-size: 0.7rem;
     letter-spacing: 2px; text-transform: uppercase; margin-bottom: 7px;
   }
   .form-row input, .form-row textarea {
-    width: 100%; background: #222; border: 1px solid #333;
-    color: var(--light); padding: 13px 16px; font-family: 'Lato', sans-serif;
-    font-size: .93rem; outline: none; transition: border .3s;
+    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    color: var(--light); padding: 13px 16px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; outline: none; transition: border 0.3s;
   }
   .form-row input:focus, .form-row textarea:focus { border-color: var(--gold); }
-  .form-row textarea { height: 115px; resize: vertical; }
+  .form-row textarea { height: 110px; resize: vertical; }
   .btn-send {
     background: var(--gold); color: var(--dark); border: none;
-    padding: 14px 40px; font-size: .85rem; font-weight: 700;
+    padding: 15px 40px; font-size: 0.82rem; font-weight: 600;
     letter-spacing: 2px; text-transform: uppercase; cursor: pointer;
-    transition: all .3s; width: 100%; font-family: 'Lato', sans-serif;
+    transition: all 0.3s; width: 100%; font-family: 'DM Sans', sans-serif;
   }
-  .btn-send:hover { background: #b8915a; }
+  .btn-send:hover { background: var(--gold-light); }
 
-  /* WhatsApp Float Button */
+  /* WhatsApp */
   .whatsapp-float {
-    position: fixed; bottom: 20px; right: 20px;
-    background: #25D366; color: white; padding: 15px 25px;
-    border-radius: 50px; text-decoration: none; font-weight: bold;
+    position: fixed; bottom: 22px; right: 22px;
+    background: #25D366; color: white; padding: 14px 24px;
+    border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.85rem;
     z-index: 9999; display: flex; align-items: center; gap: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2); transition: transform 0.3s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25); transition: transform 0.3s, background 0.3s;
+    font-family: 'DM Sans', sans-serif;
   }
-  .whatsapp-float:hover { transform: scale(1.05); background: #20b859; }
+  .whatsapp-float:hover { transform: scale(1.04) translateY(-2px); background: #20b859; }
 
   /* Footer */
   footer {
-    background: #111; padding: 28px 60px;
+    background: var(--dark); padding: 28px 64px;
     display: flex; justify-content: space-between; align-items: center;
-    border-top: 1px solid #222; flex-wrap: wrap; gap: 10px;
+    border-top: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 10px;
   }
-  .footer-logo { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.1rem; }
-  footer p { color: #555; font-size: .78rem; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; color: var(--gold); font-size: 1.1rem; }
+  footer p { color: #444; font-size: 0.75rem; }
 
-  /* Media Queries */
-  @media (max-width: 900px) {
-    nav { padding: 12px 20px; }
+  /* ========================
+     MEDIA QUERIES
+  ======================== */
+  @media (max-width: 960px) {
+    nav { padding: 14px 24px; }
     .nav-links { display: none; }
-    section { padding: 60px 22px; }
-    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    section { padding: 64px 24px; }
+    .pain-band { padding: 56px 24px; }
+    .pain-band-inner { grid-template-columns: 1fr; gap: 40px; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
     .services-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: 1fr 1fr; }
     .gallery-grid { grid-template-columns: 1fr 1fr; }
-    .gallery-item.tall { grid-row: span 1; }
-    .gallery-item.tall img { min-height: 260px; }
-    .stats-grid { grid-template-columns: 1fr 1fr; gap: 25px; }
+    .gallery-item.tall { grid-row: span 1; aspect-ratio: 4/3; }
+    .gallery-item.tall img { min-height: 0; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
     .gallery-header { flex-direction: column; align-items: flex-start; }
-    .about-img-badge { right: 0; }
+    .about-img-badge { right: 0; bottom: -16px; }
     footer { flex-direction: column; text-align: center; }
-    .stats { padding: 50px 22px; }
-    .design-full { height: 70vh; }
+    .stats { padding: 50px 24px; }
+    .testimonial { padding: 60px 24px; }
   }
-
-  @media (max-width: 480px) {
+  @media (max-width: 520px) {
     .gallery-grid { grid-template-columns: 1fr; }
-    .hero-btns .btn-gold, .hero-btns .btn-outline { padding: 10px 20px; font-size: 0.75rem; }
+    .process-grid { grid-template-columns: 1fr; }
+    .hero-btns { flex-direction: column; align-items: center; }
   }
 </style>
 </head>
@@ -324,139 +464,207 @@
 
 <!-- NAV -->
 <nav>
-  <div class="logo">CR <span>Muebles <em style="font-style:italic;font-family:'Georgia',serif;">&</em> Decoración</span></div>
+  <div class="logo">CR <span>Muebles & Decoración</span></div>
   <ul class="nav-links">
     <li><a href="#inicio">Inicio</a></li>
-    <li><a href="#nosotros">Nosotros</a></li>
     <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#proceso">Cómo funciona</a></li>
     <li><a href="#galeria">Portafolio</a></li>
-    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="#contacto" class="nav-cta">Cotiza gratis</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
+<!-- ====== HERO ====== -->
 <section class="hero" id="inicio">
   <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-badge">✦ Diseño & Elegancia</div>
-    <h1>Transformamos<br>espacios en <span>obras</span><br>de arte</h1>
-    <p>Muebles a medida y decoración de interiores con materiales premium. Cada pieza, una historia de calidad y estilo único.</p>
+    <div class="hero-eyebrow">Muebles a medida · Pereira</div>
+    <h1>Tu espacio,<br><em>finalmente</em><br><strong>como lo imaginaste</strong></h1>
+    <p class="hero-sub">¿Buscas un armario que aproveche cada centímetro? ¿Una cocina que facilite tu día a día? Te diseñamos lo que necesitas, con materiales que duran décadas.</p>
+    <span class="hero-promise">Sin obra. Sin sorpresas. Con garantía.</span>
     <div class="hero-btns">
-      <a href="#galeria" class="btn-gold">Ver Portafolio</a>
-      <a href="#contacto" class="btn-outline">Contáctanos</a>
+      <a href="#contacto" class="btn-gold">Cotiza tu proyecto — es gratis</a>
+      <a href="#galeria" class="btn-outline">Ver proyectos reales</a>
     </div>
   </div>
   <div class="scroll-indicator">
-    <span>Scroll</span>
+    <span>Descubre</span>
     <div class="scroll-line"></div>
   </div>
 </section>
 
-<!-- SOBRE NOSOTROS -->
-<section class="about" id="nosotros">
-  <div class="about-grid">
-    <div class="about-img">
-      <img src="https://res.cloudinary.com/dnqzhisyj/image/upload/v1776457868/WhatsApp_Image_2026-04-15_at_5.10.17_PM_1_qopmbx.jpg" alt="Taller CR Muebles">
-      <div class="about-img-badge">
-        <span class="num">100%</span>
-        <span class="txt">Hecho a medida</span>
-      </div>
+<!-- ====== PAIN POINTS ====== -->
+<div class="pain-band">
+  <div class="pain-band-inner">
+    <div>
+      <div class="section-label">¿Te suena familiar?</div>
+      <h2 class="pain-title">Estos problemas tienen <em>solución</em> — y la tenemos nosotros</h2>
     </div>
-    <div class="about-text">
-      <div class="section-label">Sobre Nosotros</div>
-      <h2 class="section-title">Pasión por el diseño de interiores</h2>
-      <div class="section-line"></div>
-      <p>En <strong>CR Muebles y Decoración</strong> nos especializamos en crear espacios únicos que reflejan la personalidad y el estilo de cada cliente. Cada proyecto es una nueva oportunidad de superar expectativas.</p>
-      <p>Trabajamos con los mejores materiales y técnicas de fabricación para garantizar muebles y decoraciones que combinan belleza, funcionalidad y durabilidad.</p>
-      <div class="features">
-        <div class="feature"><div class="feature-icon"><i class="fas fa-tree"></i></div><span>Materiales Premium</span></div>
-        <div class="feature"><div class="feature-icon"><i class="fas fa-ruler-combined"></i></div><span>Diseño a Medida</span></div>
-        <div class="feature"><div class="feature-icon"><i class="fas fa-star"></i></div><span>Calidad Garantizada</span></div>
-        <div class="feature"><div class="feature-icon"><i class="fas fa-truck"></i></div><span>Entrega e Instalación</span></div>
+    <div class="pain-items">
+      <div class="pain-item">
+        <div class="pain-check"><i class="fas fa-check"></i></div>
+        <p><strong>El espacio no te rinde</strong>Tienes un rincón, una pared inclinada o una medida extraña que ningún mueble estándar aprovecha. Lo fabricamos exactamente a tu medida.</p>
+      </div>
+      <div class="pain-item">
+        <div class="pain-check"><i class="fas fa-check"></i></div>
+        <p><strong>Lo que encontraste en tiendas no te convence</strong>O es muy caro, o es demasiado genérico, o tardará meses. Con nosotros obtienes calidad premium en plazos reales.</p>
+      </div>
+      <div class="pain-item">
+        <div class="pain-check"><i class="fas fa-check"></i></div>
+        <p><strong>No sabes por dónde empezar</strong>Te acompañamos desde la idea hasta la instalación: materiales, acabados, distribución y presupuesto claro desde el primer día.</p>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- SERVICIOS -->
+<!-- ====== SERVICIOS ====== -->
 <section class="services" id="servicios">
-  <div style="max-width:1100px;margin:0 auto 50px;">
-    <div class="section-label">Lo que hacemos</div>
-    <h2 class="section-title" style="color:var(--light)">Nuestros Servicios</h2>
+  <div style="max-width:1100px;margin:0 auto 0;">
+    <div class="section-label">Lo que logramos juntos</div>
+    <h2 class="section-title">Soluciones para cada rincón de tu hogar</h2>
     <div class="section-line"></div>
+    <p class="services-intro">No vendemos muebles. Resolvemos problemas de espacio, organización y estética para que tu casa — o tu negocio — funcione mejor y se vea exactamente como quieres.</p>
   </div>
   <div class="services-grid">
     <div class="service-card">
       <div class="service-icon"><i class="fas fa-couch"></i></div>
+      <div class="service-benefit">Organización + Estilo</div>
       <h3>Muebles a Medida</h3>
-      <p>Diseñamos y fabricamos muebles únicos adaptados a tu espacio y estilo.</p>
+      <p>Aprovecha hasta el último centímetro de tu espacio. Armarios, estanterías, vitrinas y más, fabricados específicamente para tu hogar. Sin desperdiciar espacio ni dinero.</p>
     </div>
     <div class="service-card">
       <div class="service-icon"><i class="fas fa-home"></i></div>
+      <div class="service-benefit">Transforma tu ambiente</div>
       <h3>Decoración de Interiores</h3>
-      <p>Transformamos cualquier ambiente con propuestas elegantes.</p>
+      <p>Cambia cómo te sientes en casa. Un espacio bien decorado reduce el estrés, mejora tu humor y hace que quieras volver a casa al final del día.</p>
     </div>
     <div class="service-card">
       <div class="service-icon"><i class="fas fa-utensils"></i></div>
+      <div class="service-benefit">El corazón del hogar</div>
       <h3>Cocinas & Comedores</h3>
-      <p>Espacios funcionales que combinan estética y practicidad.</p>
+      <p>Una cocina bien organizada te ahorra tiempo cada mañana. Diseñamos módulos que hacen tu rutina diaria más fácil y eficiente.</p>
     </div>
     <div class="service-card">
       <div class="service-icon"><i class="fas fa-bed"></i></div>
+      <div class="service-benefit">Descanso real</div>
       <h3>Dormitorios</h3>
-      <p>Ambientes de descanso con diseño armonioso.</p>
+      <p>Tu habitación debe ser tu refugio. Diseñamos ambientes que favorecen el descanso, el orden y la tranquilidad que mereces al llegar a casa.</p>
     </div>
     <div class="service-card">
       <div class="service-icon"><i class="fas fa-building"></i></div>
+      <div class="service-benefit">Primera impresión que vende</div>
       <h3>Espacios Comerciales</h3>
-      <p>Mobiliario que proyecta profesionalismo.</p>
+      <p>Tu local habla de tu marca antes de que abras la boca. Un espacio bien diseñado genera confianza, retiene clientes y aumenta tus ventas.</p>
     </div>
     <div class="service-card">
       <div class="service-icon"><i class="fas fa-lightbulb"></i></div>
+      <div class="service-benefit">Sin perderte en el proceso</div>
       <h3>Asesoría de Diseño</h3>
-      <p>Te guiamos en materiales, colores y estilo.</p>
+      <p>No tienes que saberlo todo. Te guiamos con opciones claras, presupuesto sin letra pequeña y recomendaciones honestas para que decidas con seguridad.</p>
     </div>
   </div>
-  
-  <!-- Botón del configurador 3D -->
   <div class="config-btn-container">
     <a href="configurador-3d.html" target="_blank" class="btn-config">
-      🛠 Diseña tu armario en 3D →
+      🛠 Prueba el configurador 3D de armarios →
     </a>
   </div>
 </section>
 
-<!-- GALERÍA -->
+<!-- ====== PROCESO ====== -->
+<section class="process" id="proceso">
+  <div style="max-width:1100px;margin:0 auto 50px;">
+    <div class="section-label">Sin complicaciones</div>
+    <h2 class="section-title">Así de fácil es trabajar con nosotros</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="process-grid" style="max-width:1100px;margin:0 auto;">
+    <div class="process-step">
+      <span class="step-num">01</span>
+      <h4>Nos cuentas tu idea</h4>
+      <p>Por WhatsApp, correo o en persona. Sin formularios complicados. Nos dices qué necesitas y en qué espacio.</p>
+      <div class="process-step-connector"></div>
+    </div>
+    <div class="process-step">
+      <span class="step-num">02</span>
+      <h4>Recibes tu presupuesto</h4>
+      <p>Claro, detallado y sin sorpresas. Te explicamos materiales, plazos y costos antes de comprometerte con nada.</p>
+      <div class="process-step-connector"></div>
+    </div>
+    <div class="process-step">
+      <span class="step-num">03</span>
+      <h4>Fabricamos con cuidado</h4>
+      <p>Cada pieza pasa por control de calidad antes de salir de nuestro taller. Sin atajos en los materiales.</p>
+      <div class="process-step-connector"></div>
+    </div>
+    <div class="process-step">
+      <span class="step-num">04</span>
+      <h4>Instalamos y listo</h4>
+      <p>Llegamos, instalamos y dejamos todo perfecto. Tú solo disfrutas el resultado sin estrés ni herramientas.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ====== ABOUT ====== -->
+<section class="about" id="nosotros">
+  <div class="about-grid">
+    <div class="about-img">
+      <img src="https://res.cloudinary.com/dnqzhisyj/image/upload/v1776457868/WhatsApp_Image_2026-04-15_at_5.10.17_PM_1_qopmbx.jpg" alt="Taller CR Muebles Pereira">
+      <div class="about-img-badge">
+        <span class="num">150+</span>
+        <span class="txt">Familias satisfechas</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-label">Por qué elegirnos</div>
+      <h2 class="section-title">Tu inversión queda protegida desde el primer día</h2>
+      <div class="section-line"></div>
+      <p>Fabricar un mueble a medida es una inversión. Por eso nos tomamos muy en serio que quedes satisfecho: usamos materiales de primera calidad, fabricamos con precisión y te acompañamos hasta que el resultado sea exactamente el que necesitabas.</p>
+      <p>No somos la opción más barata — y eso es intencional. Preferimos que compres una vez y quedes feliz, en lugar de que tengas que reemplazar algo en dos años. Nuestros clientes vuelven porque los resultados duran.</p>
+      <div class="guarantee-box">
+        <p>🔒 <strong>Garantía de satisfacción:</strong> Si al instalar algo no es como lo acordamos, lo corregimos sin coste adicional. Tu tranquilidad está incluida en el precio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== GALLERY ====== -->
 <section class="gallery" id="galeria">
   <div class="gallery-header">
     <div>
-      <div class="section-label">Nuestro trabajo</div>
-      <h2 class="section-title">Proyectos recientes</h2>
+      <div class="section-label">Resultados reales</div>
+      <h2 class="section-title">Proyectos que hablan por nosotros</h2>
       <div class="section-line"></div>
     </div>
-    <a href="#contacto" class="btn-outline" style="display:inline-block;">Solicita el tuyo →</a>
+    <a href="#contacto" class="btn-outline" style="color:var(--gold);border-color:rgba(201,169,110,0.4);">¿El tuyo es el siguiente? →</a>
   </div>
   <div class="gallery-grid" id="gallery-grid"></div>
 </section>
 
-<!-- STATS -->
+<!-- ====== STATS ====== -->
 <div class="stats">
   <div class="stats-grid">
-    <div><div class="stat-num">150+</div><div class="stat-label">Proyectos Completados</div></div>
-    <div><div class="stat-num">100%</div><div class="stat-label">Clientes Satisfechos</div></div>
-    <div><div class="stat-num">5★</div><div class="stat-label">Valoración Promedio</div></div>
-    <div><div class="stat-num">A+</div><div class="stat-label">Calidad de Materiales</div></div>
+    <div><div class="stat-num">150+</div><div class="stat-label">Proyectos terminados</div></div>
+    <div><div class="stat-num">100%</div><div class="stat-label">Instalación incluida</div></div>
+    <div><div class="stat-num">5★</div><div class="stat-label">Valoración promedio</div></div>
+    <div><div class="stat-num">0</div><div class="stat-label">Sorpresas en el precio</div></div>
   </div>
 </div>
 
-<!-- CONTACTO -->
+<!-- ====== TESTIMONIAL ====== -->
+<div class="testimonial">
+  <blockquote>"Por fin mi dormitorio tiene el armario que siempre quise — y caben todas mis cosas. No puedo creer cuánto espacio ganamos."</blockquote>
+  <cite>— Cliente satisfecho, Pereira</cite>
+</div>
+
+<!-- ====== CONTACT ====== -->
 <section class="contact" id="contacto">
   <div class="contact-grid">
     <div class="contact-info">
-      <div class="section-label">Hablemos</div>
-      <h2 class="section-title">¿Tienes un proyecto<br>en mente?</h2>
+      <div class="section-label">Empieza hoy</div>
+      <h2 class="section-title">Tu presupuesto,<br>gratis y sin compromiso</h2>
       <div class="section-line"></div>
-      <p>Contáctanos y cuéntanos tu idea. Nos encanta transformar espacios con <strong style="color:var(--gold)">muebles a medida en Pereira</strong> y hacer realidad la visión de nuestros clientes.</p>
+      <p>Cuéntanos qué necesitas y te respondemos con un presupuesto claro en menos de 24 horas. Sin letra pequeña, sin presiones, sin rodeos. Solo soluciones.</p>
       <div class="social-links">
         <a href="https://www.instagram.com/crmueblesydecoracion?igsh=MW40eG9wcjBoYTZoZA%3D%3D&utm_source=qr" target="_blank" class="social-link">
           <div class="social-icon"><i class="fab fa-instagram"></i></div>
@@ -468,29 +676,30 @@
         </a>
         <a href="mailto:miguel_716@hotmail.com" class="social-link">
           <div class="social-icon"><i class="far fa-envelope"></i></div>
-          <div class="social-link-info"><strong>Correo Electrónico</strong><span>miguel_716@hotmail.com</span></div>
+          <div class="social-link-info"><strong>Correo</strong><span>miguel_716@hotmail.com</span></div>
         </a>
       </div>
     </div>
     <div class="contact-form-area">
-      <h3>Solicita tu presupuesto gratis</h3>
+      <h3>Cuéntanos tu proyecto</h3>
+      <p class="form-subtitle">Nada técnico, solo dinos qué quieres cambiar en casa y nosotros te guiamos desde ahí.</p>
       <form action="https://formsubmit.co/miguel_716@hotmail.com" method="POST">
         <div class="form-row">
-          <label>Nombre</label>
-          <input type="text" name="nombre" required placeholder="Tu nombre completo">
+          <label>Tu nombre</label>
+          <input type="text" name="nombre" required placeholder="¿Cómo te llamamos?">
         </div>
         <div class="form-row">
           <label>Email o teléfono</label>
-          <input type="text" name="contacto" required placeholder="¿Cómo te contactamos?">
+          <input type="text" name="contacto" required placeholder="Para enviarte el presupuesto">
         </div>
         <div class="form-row">
-          <label>Cuéntanos tu proyecto</label>
-          <textarea name="mensaje" required placeholder="¿Qué tipo de mueble necesitas? ¿Cuál es el espacio?"></textarea>
+          <label>¿Qué necesitas?</label>
+          <textarea name="mensaje" required placeholder="Ej: Quiero un armario empotrado para mi habitación de 3m x 2.5m. Busco algo moderno con cajones internos..."></textarea>
         </div>
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_subject" value="Nuevo cliente desde tu página web 🔥">
-        <button class="btn-send" type="submit">Enviar Mensaje ✦</button>
+        <button class="btn-send" type="submit">Enviar — Te respondo en menos de 24h ✦</button>
       </form>
     </div>
   </div>
@@ -508,56 +717,17 @@
 </footer>
 
 <script>
-// ============================================
-// PROTECCIÓN DEL SITIO
-// ============================================
-
-// Deshabilitar clic derecho
-document.addEventListener('contextmenu', function(e) {
+// Protección del sitio
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey && ['c','u','s','i'].includes(e.key)) ||
+      (e.ctrlKey && e.shiftKey && e.key === 'I') || e.key === 'F12') {
     e.preventDefault();
-    return false;
+  }
 });
+document.addEventListener('selectstart', e => e.preventDefault());
 
-// Deshabilitar atajos de teclado (Ctrl+C, Ctrl+U, Ctrl+S, F12)
-document.addEventListener('keydown', function(e) {
-    if ((e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'i')) ||
-        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-        e.key === 'F12') {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// Deshabilitar selección de texto
-document.addEventListener('selectstart', function(e) {
-    e.preventDefault();
-    return false;
-});
-
-// Prevenir inspección de elementos
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
-        e.preventDefault();
-        return false;
-    }
-});
-
-// Variable de protección
-let _CR_PROTECT = true;
-
-function _verifyProtection() {
-    if (!_CR_PROTECT) {
-        document.body.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#1a1a1a;color:#C4A46B;font-family:sans-serif;text-align:center;padding:20px;">🔒 Este contenido está protegido por derechos de autor.<br><br>© CR Design Muebles</div>';
-    }
-}
-
-setInterval(_verifyProtection, 1000);
-
-// ============================================
-// FUNCIONES PRINCIPALES
-// ============================================
-
-// Lightbox functions
+// Lightbox
 function openLightbox(src) {
   document.getElementById('lightbox-img').src = src;
   document.getElementById('lightbox').classList.add('active');
@@ -565,11 +735,9 @@ function openLightbox(src) {
 function closeLightbox() {
   document.getElementById('lightbox').classList.remove('active');
 }
-document.addEventListener('keydown', function(e) { 
-  if (e.key === 'Escape') closeLightbox(); 
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-// Gallery data
+// Gallery
 const galleryData = [
   { tall: true, img: "https://res.cloudinary.com/dnqzhisyj/image/upload/v1776467032/WhatsApp_Image_2026-03-18_at_4.36.38_PM_ypxfgm.jpg", alt: "Armario empotrado blanco roto" },
   { tall: true, img: "https://res.cloudinary.com/dnqzhisyj/image/upload/v1776457868/WhatsApp_Image_2026-04-15_at_5.10.17_PM_1_qopmbx.jpg", alt: "Armario puertas de cristal a medida" },
@@ -581,31 +749,19 @@ const galleryData = [
 
 const grid = document.getElementById('gallery-grid');
 if (grid) {
-  galleryData.forEach((item, index) => {
+  galleryData.forEach(item => {
     const div = document.createElement('div');
     div.className = 'gallery-item' + (item.tall ? ' tall' : '');
-    
     const img = document.createElement('img');
-    img.src = item.img;
-    img.alt = item.alt;
-    img.loading = 'lazy';
-    
+    img.src = item.img; img.alt = item.alt; img.loading = 'lazy';
     const overlay = document.createElement('div');
     overlay.className = 'gallery-overlay';
     overlay.innerHTML = '<div class="overlay-icon"><i class="fas fa-search-plus"></i></div>';
-    
-    div.appendChild(img);
-    div.appendChild(overlay);
+    div.appendChild(img); div.appendChild(overlay);
     div.onclick = () => openLightbox(item.img);
     grid.appendChild(div);
   });
 }
-
-// Contador de visitas
-let visitCount = localStorage.getItem('cr_website_visits');
-visitCount = visitCount ? parseInt(visitCount) + 1 : 1;
-localStorage.setItem('cr_website_visits', visitCount);
-console.log('Visitas a la página:', visitCount);
 </script>
 </body>
 </html>
