@@ -2,1023 +2,734 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>CR Design IA — Diseño de Muebles a Medida</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>CR Muebles y Decoración - Diseña tu armario 3D</title>
+
+<!-- PWA CONFIGURACIÓN -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CR Muebles">
+<meta name="theme-color" content="#c8a870">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-touch-icon" href="icons/icon-192.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --bg: #0C0B09;
-  --sf: #131210;
-  --sf2: #1A1915;
-  --sf3: #22201A;
-  --bd: #2C2920;
-  --bd2: #3A3628;
-  --gold: #C8A870;
-  --gold-l: #E0C898;
-  --gold-d: #8C6830;
-  --cream: #F0EAD8;
-  --muted: #6A6558;
-  --tx: #E8E0CC;
-  --r: 6px;
+/* ========== PROTECCIONES ========== */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--tx); overflow: hidden; }
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: var(--bd2); border-radius: 4px; }
-
-/* ── HEADER ── */
-header {
-  height: 56px; background: var(--sf); border-bottom: 1px solid var(--bd);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 20px; flex-shrink: 0; position: relative; z-index: 10;
-}
-.logo { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 500; color: var(--cream); letter-spacing: 0.04em; text-decoration: none; }
-.logo em { color: var(--gold); font-style: normal; }
-.logo-sub { font-size: 10px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 1px; }
-.header-right { display: flex; align-items: center; gap: 10px; }
-.hbadge { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border: 1px solid var(--bd2); border-radius: 20px; color: var(--muted); }
-.hbadge.live { border-color: rgba(200,168,112,0.4); color: var(--gold); display: flex; align-items: center; gap: 5px; }
-.pulse { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { opacity:0.3; transform:scale(1); } 50% { opacity:1; transform:scale(1.4); } }
-
-/* ── LAYOUT ── */
-.layout { display: flex; height: calc(100vh - 56px); }
-
-/* ── CHAT PANEL ── */
-.chat-panel {
-  flex: 1; display: flex; flex-direction: column; min-width: 0;
-  border-right: 1px solid var(--bd);
-}
-.chat-messages {
-  flex: 1; overflow-y: auto; padding: 24px 20px; display: flex; flex-direction: column; gap: 16px;
+input, textarea {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
 }
 
-/* Messages */
-.msg { display: flex; gap: 10px; max-width: 88%; animation: fadeUp 0.3s ease; }
-.msg.ai { align-self: flex-start; }
-.msg.user { align-self: flex-end; flex-direction: row-reverse; }
-@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-
-.msg-avatar {
-  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 14px;
+/* ========== VARIABLES ========== */
+:root{
+  --bg:#0a0a0b; --sf:#111113; --sf2:#18181c; --sf3:#202026;
+  --bd:#28282f; --bd2:#38383f; --gold:#c8a870; --glow:rgba(200,168,112,.15);
+  --tx:#eeebe5; --txm:#7a7a85; --txd:#44444e;
+  --green:#3ecf8e; --blue:#5b9cf6; --purple:#a78bfa; --red:#e05757;
+  --r:8px; --rL:14px; --rXl:20px;
 }
-.msg.ai .msg-avatar { background: linear-gradient(135deg, #C8A870, #8C6830); }
-.msg.user .msg-avatar { background: var(--sf3); border: 1px solid var(--bd2); }
 
-.msg-body { flex: 1; min-width: 0; }
-.msg-name { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
-.msg.ai .msg-name { color: var(--gold); }
-.msg-bubble {
-  padding: 12px 15px; border-radius: var(--r); font-size: 13px; line-height: 1.65;
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Syne',sans-serif;font-size:14px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:4px}
+
+/* ========== TOPBAR ========== */
+#tb{position:fixed;top:0;left:0;right:0;height:54px;background:rgba(10,10,11,.98);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:4px;padding:0 10px;z-index:100;overflow-x:auto}
+.logo{font-size:12px;font-weight:800;letter-spacing:3px;color:var(--gold);text-transform:uppercase;white-space:nowrap;padding-right:10px;display:flex;align-items:center;gap:7px}
+.ld{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.4)}}
+.sp{width:1px;height:22px;background:var(--bd);margin:0 3px;flex-shrink:0}
+.tg{display:flex;gap:3px;align-items:center;flex-shrink:0}
+.tl{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txd);padding:0 2px}
+.tbtn{height:30px;padding:0 10px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;letter-spacing:.4px;transition:all .15s}
+.tbtn:hover{background:var(--sf3);border-color:var(--bd2);transform:translateY(-1px)}
+.tbtn:active{transform:translateY(0)}
+.tbtn.gold{background:linear-gradient(135deg,#c8a870,#906030);border:none;color:#1a0e00;font-weight:800}
+.tbtn.gold:hover{filter:brightness(1.1)}
+.tbtn.danger{background:rgba(224,87,87,.1);border-color:rgba(224,87,87,.28);color:#f08080}
+.tbtn.danger:hover{background:rgba(224,87,87,.2)}
+.tbtn.ok{background:rgba(62,207,142,.09);border-color:rgba(62,207,142,.28);color:var(--green)}
+.tbtn.ok:hover{background:rgba(62,207,142,.16)}
+.tbtn.ghost{background:transparent;border-color:var(--bd2)}
+.tbtn.ghost:hover{background:var(--sf2)}
+.tsp{flex:1}
+
+/* BOTÓN INSTALAR APP */
+#install-btn {
+  background: linear-gradient(135deg, #25D366, #128C7E);
+  border: none;
+  color: white;
+  padding: 0 12px;
+  height: 32px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
 }
-.msg.ai .msg-bubble { background: var(--sf2); border: 1px solid var(--bd); border-radius: 2px 10px 10px 10px; color: var(--cream); }
-.msg.user .msg-bubble { background: var(--gold-d); border-radius: 10px 2px 10px 10px; color: var(--cream); text-align: right; }
+#install-btn:hover { transform: scale(1.02); filter: brightness(1.05); }
 
-/* Options chips */
-.options-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-.opt-chip {
-  padding: 6px 14px; font-size: 11px; font-family: 'DM Sans', sans-serif;
-  background: var(--sf3); border: 1px solid var(--bd2); border-radius: 20px;
-  color: var(--tx); cursor: pointer; transition: all 0.15s;
+/* ========== LAYOUT ========== */
+#sl{position:fixed;left:0;top:54px;bottom:0;width:276px;background:var(--sf);border-right:1px solid var(--bd);overflow-y:auto;z-index:90;display:flex;flex-direction:column}
+#sr{position:fixed;right:0;top:54px;bottom:0;width:250px;background:var(--sf);border-left:1px solid var(--bd);overflow-y:auto;z-index:90}
+#cw{position:fixed;top:54px;left:276px;right:250px;bottom:0;background:var(--bg)}
+canvas{display:block;width:100%;height:100%}
+
+/* ========== SECTIONS ========== */
+.sec{padding:13px;border-bottom:1px solid var(--bd)}
+.sec:last-child{border-bottom:none}
+.slbl{font-size:8px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--txd);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.slbl::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+.mc{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rL);padding:10px 11px;cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:9px;margin-bottom:5px;position:relative;overflow:hidden}
+.mc::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--glow),transparent);opacity:0;transition:opacity .2s}
+.mc:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.mc:hover::before{opacity:1}
+.mc:active{transform:translateY(0)}
+.mc.c-colgador{border-left:2px solid var(--green)}
+.mc.c-cajones{border-left:2px solid var(--blue)}
+.mc.c-estantes{border-left:2px solid var(--purple)}
+.mc.c-maletas{border-left:2px solid #f59e0b}
+.mc.c-basico{border-left:2px solid var(--gold)}
+.mi{width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px}
+.mi.g{background:rgba(62,207,142,.1)}
+.mi.b{background:rgba(91,156,246,.1)}
+.mi.p{background:rgba(167,139,250,.1)}
+.mi.a{background:rgba(245,158,11,.1)}
+.mi.go{background:rgba(200,168,112,.1)}
+.mn{font-size:11px;font-weight:800;color:var(--tx);margin-bottom:2px}
+.md{font-size:9px;color:var(--txm);line-height:1.4}
+.mm{font-family:'DM Mono',monospace;font-size:8px;color:var(--txd);margin-top:2px}
+.mc-info{flex:1;min-width:0}
+.mc-add{width:22px;height:22px;border-radius:5px;border:1px solid var(--bd2);background:transparent;color:var(--txm);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .14s;flex-shrink:0}
+.mc-add:hover{background:var(--gold);border-color:var(--gold);color:#1a0e00;transform:scale(1.12)}
+
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.pb{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rL);padding:9px 7px 8px;cursor:pointer;text-align:center;transition:all .14s;position:relative;overflow:hidden}
+.pb::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--glow),transparent);opacity:0;transition:opacity .2s}
+.pb:hover{border-color:var(--bd2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.pb:hover::before{opacity:1}
+.pb:active{transform:translateY(0)}
+.pi{font-size:17px;display:block;margin-bottom:3px;line-height:1}
+.pl{font-size:9px;color:var(--txm);font-weight:700;letter-spacing:.4px}
+
+.ilbl{font-size:8px;color:var(--txd);letter-spacing:.8px;text-transform:uppercase;font-weight:700}
+.ni{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:7px 9px;color:var(--tx);font-size:12px;font-family:'DM Mono',monospace;width:100%}
+.ni:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--glow)}
+
+.srow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.sc2{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rL);padding:10px 7px;text-align:center}
+.sc2::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:36%;height:1px;background:var(--gold);opacity:.22}
+.sn{font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--gold)}
+.sl2{font-size:8px;color:var(--txd);text-transform:uppercase;margin-top:4px}
+
+.eli{display:flex;align-items:center;gap:7px;padding:7px 8px;border-radius:var(--r);cursor:pointer;margin-bottom:2px;border:1px solid transparent}
+.eli:hover{background:var(--sf2);border-color:var(--bd)}
+.eli.sel{background:rgba(200,168,112,.07);border-color:rgba(200,168,112,.38)}
+.eii{width:22px;height:22px;border-radius:5px;background:var(--sf3);display:flex;align-items:center;justify-content:center;font-size:10px}
+.ein{flex:1;color:var(--tx);font-weight:700}
+.eid{font-family:'DM Mono',monospace;font-size:8px;color:var(--txd)}
+.eeb{width:20px;height:20px;border-radius:4px;background:transparent;border:1px solid var(--bd);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px}
+.eeb:hover{background:var(--sf3);color:var(--gold)}
+
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.vb{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:8px 7px;cursor:pointer;text-align:center;color:var(--txm);font-size:10px;font-weight:700}
+.vb:hover{background:var(--sf3);color:var(--gold)}
+
+#fz{position:fixed;bottom:18px;right:262px;display:flex;gap:4px;z-index:95}
+.fb{width:36px;height:36px;background:rgba(17,17,19,.93);backdrop-filter:blur(10px);border:1px solid var(--bd2);border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--txm)}
+.fb:hover{background:var(--sf3);color:var(--gold);transform:translateY(-2px)}
+
+#ib{position:fixed;bottom:18px;left:288px;display:flex;gap:5px;z-index:95}
+.ip{background:rgba(17,17,19,.93);backdrop-filter:blur(10px);border:1px solid var(--bd2);border-radius:20px;padding:5px 12px;font-size:10px;color:var(--txm);white-space:nowrap}
+.ip span{color:var(--gold)}
+
+.mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(7px)}
+.mb.show{display:flex}
+.mc2{background:var(--sf);border:1px solid var(--bd2);border-radius:var(--rXl);padding:26px;width:90%;max-width:460px;max-height:92vh;overflow-y:auto}
+.mt{font-size:17px;font-weight:800;margin-bottom:4px}
+.mt .ac{color:var(--gold)}
+.ms{font-size:11px;color:var(--txm);margin-bottom:18px}
+.fr{margin-bottom:11px}
+.fl{font-size:8px;text-transform:uppercase;color:var(--txd);margin-bottom:5px;display:block}
+.fi{width:100%;padding:10px 12px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);color:var(--tx);font-size:13px}
+.fi:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--glow)}
+.ma{display:flex;gap:8px;margin-top:18px}
+.bp{flex:1;padding:12px;background:linear-gradient(135deg,var(--gold),#906030);border:none;border-radius:var(--r);color:#1a0e00;font-weight:800;font-size:11px;cursor:pointer}
+.bp:hover{filter:brightness(1.1)}
+.bs{padding:12px 15px;background:transparent;border:1px solid var(--bd2);border-radius:var(--r);color:var(--txm);font-size:11px;cursor:pointer}
+.bs:hover{background:var(--sf2);color:var(--tx)}
+
+.pmc{background:var(--sf);border:1px solid rgba(200,168,112,.35);border-radius:var(--rXl);padding:24px;width:90%;max-width:420px}
+.pdg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:14px 0}
+.pdi input{width:100%;padding:10px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);color:var(--tx);font-size:16px;text-align:center}
+.pdi input:focus{outline:none;border-color:var(--gold)}
+
+.si{position:fixed;top:65px;left:50%;transform:translateX(-50%);z-index:95;display:none}
+.si.show{display:block}
+.sp2{background:rgba(62,207,142,.09);border:1px solid rgba(62,207,142,.32);border-radius:20px;padding:5px 16px;font-size:10px;color:var(--green)}
+
+.guide{background:linear-gradient(135deg,rgba(200,168,112,.07),rgba(200,168,112,.02));border:1px solid rgba(200,168,112,.18);border-radius:var(--rL);padding:10px}
+.guide p{font-size:10px;color:var(--txm);line-height:1.7}
+.guide strong{color:var(--gold)}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px}
+.badge.g{background:rgba(200,168,112,.1);color:var(--gold);border:1px solid rgba(200,168,112,.22)}
+.badge.m{background:var(--sf2);color:var(--txm);border:1px solid var(--bd)}
+
+.chkrow{display:flex;align-items:center;gap:9px;padding:9px 11px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:10px;cursor:pointer}
+.chkrow input{accent-color:var(--gold);width:15px;height:15px}
+.chkrow label{font-size:10px;color:var(--txm);font-weight:700}
+.chkrow label strong{color:var(--tx)}
+
+.ttabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:12px}
+.ttab{padding:5px 11px;border-radius:20px;border:1px solid var(--bd2);background:var(--sf2);color:var(--txm);font-size:10px;font-weight:700;cursor:pointer}
+.ttab:hover{color:var(--tx)}
+.ttab.ac-g{background:rgba(62,207,142,.12);border-color:var(--green);color:var(--green)}
+.ttab.ac-b{background:rgba(91,156,246,.12);border-color:var(--blue);color:var(--blue)}
+.ttab.ac-p{background:rgba(167,139,250,.12);border-color:var(--purple);color:var(--purple)}
+.ttab.ac-a{background:rgba(245,158,11,.12);border-color:#f59e0b;color:#f59e0b}
+.ttab.ac-go{background:rgba(200,168,112,.12);border-color:var(--gold);color:var(--gold)}
+
+.elw{max-height:280px;overflow-y:auto}
+.empty{text-align:center;padding:24px 12px;color:var(--txd);font-size:11px}
+.empty-i{font-size:24px;margin-bottom:8px;opacity:.22}
+
+#ig-toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(135deg,#1a0a1e,#12091a);border:1px solid rgba(225,48,108,.35);border-radius:20px;padding:16px;display:flex;align-items:center;gap:14px;z-index:300;max-width:420px;width:calc(100% - 40px);transition:transform .5s ease;opacity:0;pointer-events:none}
+#ig-toast.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+#ig-avatar{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#f9ce34,#ee2a7b,#6228d7);display:flex;align-items:center;justify-content:center;font-size:20px}
+#ig-btn{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#f9ce34,#ee2a7b,#6228d7);border:none;border-radius:10px;padding:8px 15px;color:#fff;font-size:11px;font-weight:800;text-decoration:none}
+
+.splash-screen{position:fixed;inset:0;background:#0a0a0b;z-index:1000;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity .5s ease}
+.splash-screen.hide{opacity:0;pointer-events:none}
+.splash-logo{width:80px;height:80px;background:linear-gradient(135deg,#c8a870,#906030);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:40px;margin-bottom:20px;animation:pulse 1.5s ease infinite}
+.splash-text{font-size:14px;color:#c8a870;letter-spacing:3px;font-weight:800;text-transform:uppercase}
+
+@media(max-width:960px){
+  #sl,#sr{display:none}
+  #cw{left:0;right:0}
+  #fz{right:14px;bottom:70px}
+  #ib{left:14px;bottom:12px}
+  .tbtn,.pb,.mc,.fb,.vb{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  #tb{overflow-x:auto}
 }
-.opt-chip:hover { border-color: var(--gold); color: var(--gold); background: rgba(200,168,112,0.08); }
-.opt-chip.selected { background: rgba(200,168,112,0.15); border-color: var(--gold); color: var(--gold-l); }
-
-/* Dimension inputs inline */
-.dim-form { background: var(--sf3); border: 1px solid var(--bd); border-radius: var(--r); padding: 14px; margin-top: 10px; }
-.dim-title { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
-.dim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
-.dim-field label { display: block; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-.dim-field input {
-  width: 100%; padding: 7px 10px; background: var(--sf); border: 1px solid var(--bd2);
-  border-radius: 4px; color: var(--cream); font-size: 13px; font-family: 'DM Mono', monospace;
-  outline: none; transition: border-color 0.15s;
-}
-.dim-field input:focus { border-color: var(--gold); }
-.dim-field .unit { font-size: 9px; color: var(--muted); margin-top: 2px; }
-.dim-confirm { width: 100%; padding: 9px; font-size: 11px; font-family: 'DM Sans', sans-serif; font-weight: 500; letter-spacing: 0.07em; text-transform: uppercase; background: var(--gold-d); color: var(--cream); border: none; border-radius: 4px; cursor: pointer; transition: all 0.15s; margin-top: 4px; }
-.dim-confirm:hover { background: var(--gold); color: var(--bg); }
-
-/* Typing indicator */
-.typing { display: flex; gap: 4px; align-items: center; padding: 10px 15px; }
-.typing span { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; animation: typing 1.2s ease-in-out infinite; }
-.typing span:nth-child(2) { animation-delay: 0.2s; }
-.typing span:nth-child(3) { animation-delay: 0.4s; }
-@keyframes typing { 0%,80%,100% { transform:scale(0.6); opacity:0.3; } 40% { transform:scale(1); opacity:1; } }
-
-/* Chat input */
-.chat-input-area {
-  border-top: 1px solid var(--bd); padding: 14px 16px;
-  display: flex; gap: 10px; align-items: flex-end; background: var(--sf);
-}
-.chat-textarea {
-  flex: 1; min-height: 42px; max-height: 120px; padding: 10px 14px;
-  background: var(--sf2); border: 1px solid var(--bd2); border-radius: var(--r);
-  color: var(--cream); font-size: 13px; font-family: 'DM Sans', sans-serif;
-  resize: none; outline: none; line-height: 1.5; transition: border-color 0.15s;
-}
-.chat-textarea:focus { border-color: var(--gold); }
-.chat-textarea::placeholder { color: var(--muted); }
-.send-btn {
-  width: 42px; height: 42px; background: var(--gold-d); border: none; border-radius: var(--r);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  color: var(--cream); font-size: 16px; transition: all 0.15s; flex-shrink: 0;
-}
-.send-btn:hover { background: var(--gold); color: var(--bg); }
-.send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-/* Upload button */
-.upload-btn {
-  width: 42px; height: 42px; background: var(--sf3); border: 1px solid var(--bd2); border-radius: var(--r);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  color: var(--muted); font-size: 16px; transition: all 0.15s; flex-shrink: 0;
-}
-.upload-btn:hover { border-color: var(--gold); color: var(--gold); }
-#file-input { display: none; }
-
-/* ── RIGHT PANEL ── */
-.right-panel {
-  width: 320px; flex-shrink: 0; display: flex; flex-direction: column;
-  background: var(--sf); overflow: hidden;
-}
-@media(max-width: 768px) { .right-panel { display: none; } }
-
-.rp-tabs { display: flex; border-bottom: 1px solid var(--bd); }
-.rp-tab { flex: 1; padding: 12px 6px; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: center; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
-.rp-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
-
-.rp-content { flex: 1; overflow-y: auto; padding: 16px; }
-
-/* Project summary */
-.proj-section { margin-bottom: 20px; }
-.proj-heading { font-size: 9px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--bd); display: flex; align-items: center; gap: 6px; }
-.proj-heading .dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
-
-.info-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(44,41,32,0.5); font-size: 11px; }
-.info-row:last-child { border-bottom: none; }
-.info-k { color: var(--muted); }
-.info-v { font-weight: 500; color: var(--cream); font-family: 'DM Mono', monospace; font-size: 10px; }
-
-/* Pieces table */
-.pieces-table { width: 100%; border-collapse: collapse; font-size: 10px; }
-.pieces-table th { padding: 5px 6px; text-align: left; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--bd); }
-.pieces-table td { padding: 5px 6px; border-bottom: 1px solid rgba(44,41,32,0.4); color: var(--tx); font-family: 'DM Mono', monospace; }
-.pieces-table tr:hover td { background: rgba(200,168,112,0.04); }
-.piece-num { color: var(--gold); font-weight: 500; }
-
-/* Herrajes */
-.herraje-item { display: flex; justify-content: space-between; align-items: center; padding: 7px 9px; background: var(--sf2); border: 1px solid var(--bd); border-radius: 4px; margin-bottom: 4px; font-size: 11px; }
-.herraje-name { color: var(--cream); }
-.herraje-qty { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--gold); background: rgba(200,168,112,0.1); padding: 2px 7px; border-radius: 10px; }
-
-/* CTA */
-.send-project-btn {
-  width: 100%; padding: 13px; font-size: 11px; font-family: 'DM Sans', sans-serif;
-  font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-  background: linear-gradient(135deg, var(--gold), var(--gold-d));
-  color: var(--bg); border: none; border-radius: var(--r); cursor: pointer;
-  margin-bottom: 8px; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px;
-}
-.send-project-btn:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,168,112,0.25); }
-.send-project-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
-.send-wa-btn {
-  width: 100%; padding: 11px; font-size: 11px; font-family: 'DM Sans', sans-serif;
-  font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
-  background: #25D366; color: white; border: none; border-radius: var(--r); cursor: pointer;
-  transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 7px;
-}
-.send-wa-btn:hover { background: #1ebe5d; }
-
-/* Progress bar */
-.progress-bar { height: 2px; background: var(--bd); border-radius: 2px; margin-bottom: 16px; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold-d), var(--gold)); border-radius: 2px; transition: width 0.5s ease; }
-.progress-label { font-size: 9px; color: var(--muted); text-align: right; margin-top: 3px; margin-bottom: 12px; }
-
-/* Status badge */
-.status-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 9px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
-.status-badge.pending { background: rgba(200,168,112,0.1); color: var(--gold); border: 1px solid rgba(200,168,112,0.25); }
-.status-badge.complete { background: rgba(62,207,142,0.1); color: #3ECF8E; border: 1px solid rgba(62,207,142,0.25); }
-
-/* Modal */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 500; align-items: center; justify-content: center; padding: 16px; backdrop-filter: blur(4px); }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--sf); border: 1px solid var(--bd2); border-radius: 12px; width: 100%; max-width: 440px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.7); }
-.modal-head { background: var(--bg); padding: 18px 22px; border-bottom: 1px solid var(--bd); display: flex; justify-content: space-between; align-items: center; }
-.modal-head h2 { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--cream); }
-.modal-head h2 em { color: var(--gold); font-style: normal; }
-.modal-close { background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1; transition: color 0.15s; }
-.modal-close:hover { color: var(--cream); }
-.modal-body { padding: 22px; }
-.m-field { margin-bottom: 13px; }
-.m-field label { display: block; font-size: 9px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 5px; }
-.m-field input, .m-field textarea { width: 100%; padding: 10px 13px; font-size: 13px; font-family: 'DM Sans', sans-serif; background: var(--sf2); border: 1px solid var(--bd2); border-radius: var(--r); color: var(--cream); outline: none; transition: border-color 0.15s; }
-.m-field input:focus, .m-field textarea:focus { border-color: var(--gold); }
-.m-field textarea { resize: none; }
-.m-actions { display: flex; gap: 8px; margin-top: 16px; }
-.m-cancel { flex: 1; padding: 11px; background: transparent; border: 1px solid var(--bd2); border-radius: var(--r); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 12px; cursor: pointer; }
-.m-send { flex: 2; padding: 11px; background: linear-gradient(135deg, var(--gold), var(--gold-d)); color: var(--bg); font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; border: none; border-radius: var(--r); cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase; }
-.m-send:hover { filter: brightness(1.1); }
-
-.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--sf); border: 1px solid var(--gold); color: var(--cream); padding: 10px 20px; border-radius: var(--r); font-size: 12px; opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* Empty state */
-.empty-panel { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; color: var(--muted); font-size: 12px; gap: 10px; }
-.empty-icon { font-size: 32px; opacity: 0.3; }
-
-/* Welcome screen inside chat */
-.welcome-card { background: linear-gradient(135deg, rgba(200,168,112,0.08), rgba(200,168,112,0.02)); border: 1px solid rgba(200,168,112,0.2); border-radius: 10px; padding: 20px; margin-bottom: 8px; }
-.welcome-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--cream); margin-bottom: 6px; }
-.welcome-title em { color: var(--gold); font-style: normal; }
-.welcome-sub { font-size: 12px; color: var(--muted); line-height: 1.6; }
-
-/* Image preview */
-.img-preview { max-width: 180px; border-radius: 6px; margin-top: 8px; border: 1px solid var(--bd); }
 </style>
 </head>
 <body>
 
-<header>
-  <div>
-    <div class="logo"><em>CR</em> Design Muebles</div>
-    <div class="logo-sub">Asistente de Diseño IA</div>
-  </div>
-  <div class="header-right">
-    <div class="hbadge live"><div class="pulse"></div>IA Activa</div>
-    <a href="https://crdesignmuebles.github.io/crmueblesydecoracion/" target="_blank" style="font-size:10px;color:var(--muted);text-decoration:none;letter-spacing:0.06em;text-transform:uppercase;border:1px solid var(--bd);padding:5px 12px;border-radius:20px">← Web</a>
-  </div>
-</header>
+<div class="splash-screen" id="splash">
+  <div class="splash-logo">🚪</div>
+  <div class="splash-text">CR Muebles</div>
+</div>
 
-<div class="layout">
-
-  <!-- CHAT -->
-  <div class="chat-panel">
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="chat-input-area">
-      <label class="upload-btn" title="Adjuntar imagen de referencia">
-        📎
-        <input type="file" id="file-input" accept="image/*">
-      </label>
-      <textarea class="chat-textarea" id="chatInput" placeholder="Escribe tu respuesta o pregunta..." rows="1"></textarea>
-      <button class="send-btn" id="sendBtn" onclick="sendUserMessage()">➤</button>
-    </div>
+<div id="tb">
+  <div class="logo"><div class="ld"></div>CR Muebles</div>
+  <div class="sp"></div>
+  <div class="tg"><span class="tl">Módulos</span>
+    <button class="tbtn gold" id="mod-colgador">👔 Colgador</button>
+    <button class="tbtn gold" id="mod-cajones">🗂 Cajones+Colgador</button>
+    <button class="tbtn gold" id="mod-estantes">📚 Estantes</button>
+    <button class="tbtn gold" id="mod-maletas">🧳 Superior</button>
+    <button class="tbtn gold" id="mod-basico">✦ Básico</button>
   </div>
-
-  <!-- RIGHT PANEL -->
-  <div class="right-panel">
-    <div class="rp-tabs">
-      <div class="rp-tab active" onclick="switchRpTab('resumen',this)">Resumen</div>
-      <div class="rp-tab" onclick="switchRpTab('despiece',this)">Despiece</div>
-      <div class="rp-tab" onclick="switchRpTab('herrajes',this)">Herrajes</div>
-    </div>
-    <div class="rp-content" id="rpContent">
-      <div class="empty-panel">
-        <div class="empty-icon">📐</div>
-        <div>Tu proyecto aparecerá aquí<br>mientras conversas con la IA</div>
-      </div>
-    </div>
-    <div style="padding:14px;border-top:1px solid var(--bd);display:flex;flex-direction:column;gap:7px">
-      <button class="send-project-btn" id="sendProjectBtn" onclick="openModal()" disabled>
-        ✉ Enviar proyecto completo
-      </button>
-      <button class="send-wa-btn" onclick="sendWA()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Cotizar por WhatsApp
-      </button>
-    </div>
+  <div class="sp"></div>
+  <div class="tg"><span class="tl">Extras</span>
+    <button class="tbtn ghost" id="add-zocalo">▬ Zócalo</button>
+    <button class="tbtn ghost" id="add-tapeta">▀ Tapeta</button>
+    <button class="tbtn ghost" id="add-puertas">🚪 Puertas</button>
+  </div>
+  <div class="sp"></div>
+  <div class="tg">
+    <button class="tbtn ghost" id="clear-sel">✕ Desel.</button>
+    <button class="tbtn danger" id="delete-sel">🗑 Eliminar</button>
+  </div>
+  <div class="tsp"></div>
+  <div class="tg">
+    <button id="install-btn">📲 Instalar App</button>
+    <button class="tbtn ok" id="send-design">↗ Enviar diseño</button>
   </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
-    <div class="modal-head">
-      <h2>Enviar a <em>CR Design</em></h2>
-      <button class="modal-close" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.6">Recibirás una respuesta con el presupuesto detallado en menos de 24 horas.</p>
-      <div class="m-field"><label>Nombre completo *</label><input type="text" id="cName" placeholder="Ej: María García"></div>
-      <div class="m-field"><label>Teléfono *</label><input type="tel" id="cPhone" placeholder="+57 300 000 0000"></div>
-      <div class="m-field"><label>Email</label><input type="email" id="cEmail" placeholder="tu@correo.com"></div>
-      <div class="m-field"><label>Ciudad</label><input type="text" id="cCity" placeholder="Ej: Pereira"></div>
-      <div class="m-field"><label>Notas adicionales</label><textarea id="cNotes" rows="2" placeholder="Fecha ideal, condiciones especiales..."></textarea></div>
-      <div class="m-actions">
-        <button class="m-cancel" onclick="closeModal()">Cancelar</button>
-        <button class="m-send" onclick="sendEmail()">Enviar proyecto ✉</button>
-      </div>
+<div id="sl">
+  <div class="sec">
+    <div class="slbl">Módulos</div>
+    <div class="mc c-colgador" id="mc-colgador"><div class="mi g">👔</div><div class="mc-info"><div class="mn">Colgador</div><div class="md">Barra + estante</div><div class="mm">60×200cm</div></div><button class="mc-add">+</button></div>
+    <div class="mc c-cajones" id="mc-cajones"><div class="mi b">🗂</div><div class="mc-info"><div class="mn">Cajones+Colg.</div><div class="md">3 cajones + barra</div><div class="mm">60×200cm</div></div><button class="mc-add">+</button></div>
+    <div class="mc c-estantes" id="mc-estantes"><div class="mi p">📚</div><div class="mc-info"><div class="mn">Estantes</div><div class="md">5 estantes</div><div class="mm">35×200cm</div></div><button class="mc-add">+</button></div>
+    <div class="mc c-maletas" id="mc-maletas"><div class="mi a">🧳</div><div class="mc-info"><div class="mn">Superior</div><div class="md">Maletas</div><div class="mm">60×40cm</div></div><button class="mc-add">+</button></div>
+    <div class="mc c-basico" id="mc-basico"><div class="mi go">✦</div><div class="mc-info"><div class="mn">Básico</div><div class="md">Medidas libres</div><div class="mm">Personalizable</div></div><button class="mc-add">+</button></div>
+  </div>
+  <div class="sec">
+    <div class="slbl">Extras</div>
+    <div class="pgrid">
+      <div class="pb" id="ext-puertas"><span class="pi">🚪</span><span class="pl">Puertas</span></div>
+      <div class="pb" id="ext-zocalo"><span class="pi">▬</span><span class="pl">Zócalo</span></div>
+      <div class="pb" id="ext-tapeta"><span class="pi">▀</span><span class="pl">Tapeta</span></div>
+      <div class="pb" id="ext-barra"><span class="pi">━</span><span class="pl">Barra</span></div>
+      <div class="pb" id="ext-estante"><span class="pi">▭</span><span class="pl">Estante</span></div>
+      <div class="pb" id="ext-cajon"><span class="pi">📦</span><span class="pl">Cajón</span></div>
     </div>
   </div>
+  <div class="sec">
+    <div class="slbl">Selección</div>
+    <div id="sel-info" style="font-size:11px;margin-bottom:8px">Ningún elemento</div>
+    <div id="multi-badge" style="display:none"><span class="badge g" id="mc-lbl">0 sel.</span></div>
+    <div id="tp" style="display:none">
+      <div><div class="ilbl">Posición (cm)</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+        <div><span class="ilbl">X</span><input type="number" id="px" class="ni" step="1"></div>
+        <div><span class="ilbl">Y</span><input type="number" id="py" class="ni" step="1"></div>
+        <div><span class="ilbl">Z</span><input type="number" id="pz" class="ni" step="1"></div>
+      </div></div>
+      <div style="margin-top:8px"><div class="ilbl">Dimensiones (cm)</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+        <div><span class="ilbl">Ancho</span><input type="number" id="sw" class="ni" step="5"></div>
+        <div><span class="ilbl">Alto</span><input type="number" id="sh" class="ni" step="5"></div>
+        <div><span class="ilbl">Fondo</span><input type="number" id="sd" class="ni" step="5"></div>
+      </div></div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="slbl">Resumen</div>
+    <div class="srow"><div class="sc2"><div class="sn" id="st">0</div><div class="sl2">Piezas</div></div><div class="sc2"><div class="sn" id="ss">0</div><div class="sl2">Sel.</div></div><div class="sc2"><div class="sn" id="sm">0</div><div class="sl2">Mód.</div></div></div>
+  </div>
 </div>
-<div class="toast" id="toast">✓ Proyecto enviado correctamente</div>
 
-<script>
-// ══════════════════════════════════════════════════════
-//  PROJECT STATE
-// ══════════════════════════════════════════════════════
-let project = {
-  tipo: null, estilo: null, colores: null, acabado: null,
-  puertas: null, cajones: null, herrajes: null,
-  alto: null, ancho: null, fondo: null,
-  distribucion: null, notas: null,
-  step: 0, complete: false
+<div id="sr">
+  <div class="sec"><div class="slbl">Elementos</div><div class="elw" id="el-list"><div class="empty"><div class="empty-i">◻</div>Sin elementos</div></div></div>
+  <div class="sec"><div class="slbl">Vista</div><div class="vgrid"><div class="vb" data-view="front">◀ Frontal</div><div class="vb" data-view="side">▶ Lateral</div><div class="vb" data-view="top">↑ Superior</div><div class="vb" data-view="iso">◈ Iso</div></div></div>
+</div>
+
+<div id="cw"></div>
+
+<div id="fz">
+  <div class="fb" data-view="front">◀</div><div class="fb" data-view="side">▶</div>
+  <div class="fb" data-view="top">↑</div><div class="fb" data-view="iso">◈</div>
+  <div class="fb" id="reset-view">⟳</div>
+</div>
+
+<div id="ib"><div class="ip">Aglom. <span>15mm</span></div><div class="ip" id="ctx">Elige un módulo</div></div>
+
+<div class="si" id="si"><div class="sp2" id="si-t"></div></div>
+
+<div class="mb" id="mm"><div class="pmc"><div class="mt" id="mm-title"><span class="ac">✦</span> Nuevo módulo</div><div id="mm-sub" style="font-size:10px;color:var(--txm);margin:4px 0 12px">Ajusta medidas</div><div class="slbl">Tipo</div><div class="ttabs"><button class="ttab" data-type="colgador">👔 Colgador</button><button class="ttab" data-type="cajones">🗂 Cajones+Colg.</button><button class="ttab" data-type="estantes">📚 Estantes</button><button class="ttab" data-type="maletas">🧳 Superior</button><button class="ttab" data-type="basico">✦ Básico</button></div><div class="slbl">Dimensiones (cm)</div><div class="pdg"><div class="pdi"><label>Ancho</label><input type="number" id="pm-w" value="60" min="20" max="300"></div><div class="pdi"><label>Alto</label><input type="number" id="pm-h" value="200" min="20" max="300"></div><div class="pdi"><label>Fondo</label><input type="number" id="pm-d" value="60" min="10" max="100"></div></div><div class="chkrow"><input type="checkbox" id="opt-puertas"><label><strong>Añadir puertas</strong></label></div><div class="chkrow"><input type="checkbox" id="opt-zocalo"><label><strong>Añadir zócalo</strong></label></div><div class="ma"><button class="bs" id="cancel-mod">Cancelar</button><button class="bp" id="confirm-mod">Generar</button></div></div></div>
+
+<div class="mb" id="modal-send"><div class="mc2"><div class="mt">Enviar a <span class="ac">CR Muebles</span></div><div class="ms">Recibirás presupuesto</div><div class="fr"><label class="fl">Nombre *</label><input type="text" id="fn" class="fi"></div><div class="fr"><label class="fl">Teléfono *</label><input type="tel" id="fp" class="fi"></div><div class="fr"><label class="fl">Email</label><input type="email" id="fe" class="fi"></div><div class="spinning" id="fspin" style="display:none">Enviando...</div><div class="ma"><button class="bs" id="close-send">Cancelar</button><button class="bp" id="do-send">Enviar</button></div></div></div>
+
+<div id="ig-toast"><div id="ig-avatar">📸</div><div><div id="ig-title">¿Buscas inspiración?</div><div id="ig-msg">Diseños reales en Instagram</div><a id="ig-btn" href="https://www.instagram.com/crmueblesydecoracion" target="_blank">Ver más</a></div></div>
+
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.128.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.128.0/examples/jsm/"}}</script>
+<script type="module">
+// ========== PROTECCIÓN TOTAL ==========
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('keydown', e => {
+  const key = e.key;
+  if (key === 'F12') { e.preventDefault(); return; }
+  if (e.ctrlKey && e.shiftKey && (key === 'I' || key === 'J' || key === 'C')) { e.preventDefault(); return; }
+  if (e.ctrlKey && key === 'u') { e.preventDefault(); return; }
+  if (e.ctrlKey && (key === 's' || key === 'S')) { e.preventDefault(); return; }
+  if (e.ctrlKey && (key === 'p' || key === 'P')) { e.preventDefault(); return; }
+  if (e.ctrlKey && (key === 'c' || key === 'x') && !e.target.matches('input,textarea')) { e.preventDefault(); return; }
+});
+
+// ========== BOTÓN INSTALAR APP ==========
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-btn').style.display = 'flex';
+});
+document.getElementById('install-btn').addEventListener('click', () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
+  } else {
+    alert('Para instalar:\nAndroid: Chrome → ⋮ → Añadir a pantalla de inicio\n\niPhone: Safari → Compartir → Añadir a pantalla de inicio');
+  }
+});
+
+// ========== SERVICE WORKER ==========
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW error:', err));
+  });
+}
+
+setTimeout(() => {
+  const splash = document.getElementById('splash');
+  if (splash) splash.classList.add('hide');
+}, 1500);
+
+// ========== IMPORTS THREE ==========
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { TransformControls } from 'three/addons/controls/TransformControls.js';
+
+// ========== CONSTANTES ==========
+const T15 = 0.015, T18 = 0.018, ZH = 0.06, TAP = 0.062, BR = 0.012;
+const ET = {
+  lateral: { n: 'Lateral', i: '▮', c: 0xD4BC98 },
+  piso: { n: 'Piso', i: '▬', c: 0xD4BC98 },
+  techo: { n: 'Techo', i: '▀', c: 0xD4BC98 },
+  espaldar: { n: 'Espaldar', i: '◻', c: 0xD4BC98 },
+  estante: { n: 'Estante', i: '▭', c: 0xE8D8C4 },
+  puerta: { n: 'Puerta', i: '🚪', c: 0xF0E4CC },
+  barra: { n: 'Barra', i: '━', c: 0x8899AA },
+  cajon: { n: 'Cajón', i: '📦', c: 0xCCB48A },
+  cajon_f: { n: 'Frente', i: '▬', c: 0xEADAC0 },
+  zocalo: { n: 'Zócalo', i: '▬', c: 0xBBA888 },
+  tapeta: { n: 'Tapeta', i: '▀', c: 0xBBA888 },
+  tirador: { n: 'Tirador', i: '○', c: 0xC4A46B }
 };
 
-let conversationHistory = [];
-let isTyping = false;
+let scene, camera, renderer, orbit, tcontrol;
+let group = new THREE.Group();
+let elements = [], selected = new Set(), nextId = 1, modCount = 0, nextX = 0;
+let lastModW = 0.6, lastModH = 2.0, lastModD = 0.6;
+let currentType = 'colgador';
+let modRegistry = [];
 
-// ══════════════════════════════════════════════════════
-//  CONVERSATION FLOW
-// ══════════════════════════════════════════════════════
-const STEPS = [
-  { key: 'tipo', question: null }, // handled by welcome
-  { key: 'estilo' },
-  { key: 'colores' },
-  { key: 'acabado' },
-  { key: 'puertas' },
-  { key: 'cajones' },
-  { key: 'herrajes' },
-  { key: 'medidas' },
-  { key: 'distribucion' },
-  { key: 'notas' },
-  { key: 'complete' }
-];
-
-const FURNITURE_TYPES = [
-  { id: 'armario', label: '🚪 Armario / Clóset' },
-  { id: 'cocina', label: '🍳 Cocina integral' },
-  { id: 'bano', label: '🪥 Mueble de baño' },
-  { id: 'entretenimiento', label: '📺 Centro de entretenimiento' },
-  { id: 'escritorio', label: '💻 Escritorio' },
-  { id: 'otro', label: '✦ Otro mueble' },
-];
-
-const STYLES = ['Moderno','Minimalista','Clásico','Industrial','Nórdico','Rústico','Loft'];
-const ACABADOS = ['Laminado mate','Laminado brillante','Madera natural','Lacado mate','Lacado brillante','Melamina'];
-const DOOR_TYPES = ['Correderas','Abatibles','Sin puertas','Plegables','Mixto'];
-const HERRAJES_TYPES = ['Dorado','Plateado','Negro mate','Cromo','Sin herrajes visibles'];
-
-// ══════════════════════════════════════════════════════
-//  CHAT RENDERING
-// ══════════════════════════════════════════════════════
-function addMessage(role, content, options = null, dimForm = false) {
-  const container = document.getElementById('chatMessages');
-  const wrap = document.createElement('div');
-  wrap.className = `msg ${role}`;
-
-  const avatar = document.createElement('div');
-  avatar.className = 'msg-avatar';
-  avatar.textContent = role === 'ai' ? '✦' : '👤';
-
-  const body = document.createElement('div');
-  body.className = 'msg-body';
-
-  const name = document.createElement('div');
-  name.className = 'msg-name';
-  name.textContent = role === 'ai' ? 'CR Design IA' : 'Tú';
-
-  const bubble = document.createElement('div');
-  bubble.className = 'msg-bubble';
-  bubble.innerHTML = content.replace(/\n/g, '<br>');
-
-  body.appendChild(name);
-  body.appendChild(bubble);
-
-  if (options && options.length > 0) {
-    const row = document.createElement('div');
-    row.className = 'options-row';
-    options.forEach(opt => {
-      const chip = document.createElement('button');
-      chip.className = 'opt-chip';
-      chip.textContent = typeof opt === 'object' ? opt.label : opt;
-      chip.onclick = () => {
-        document.querySelectorAll('.opt-chip').forEach(c => c.disabled = true);
-        chip.classList.add('selected');
-        const val = typeof opt === 'object' ? opt.id : opt;
-        handleOptionSelect(val, typeof opt === 'object' ? opt.label : opt);
-      };
-      row.appendChild(chip);
+function genModule(type, w, h, d, hasDoors, hasBase) {
+  const cx = nextX + w / 2;
+  // Cuerpo
+  mkBox('lateral', { x: cx - w/2 + T15/2, y: h/2, z: 0 }, { w: T15, h, d }, nextId++);
+  mkBox('lateral', { x: cx + w/2 - T15/2, y: h/2, z: 0 }, { w: T15, h, d }, nextId++);
+  mkBox('piso', { x: cx, y: T15/2, z: 0 }, { w, h: T15, d }, nextId++);
+  mkBox('techo', { x: cx, y: h - T15/2, z: 0 }, { w, h: T15, d }, nextId++);
+  mkBox('espaldar', { x: cx, y: h/2, z: -d/2 + T15/2 }, { w, h, d: T15 }, nextId++);
+  
+  const IW = w - 2*T15, ID = d - T15;
+  
+  if (type === 'colgador') {
+    const estY = h - 0.38;
+    mkBox('estante', { x: cx, y: estY - T15/2, z: -T15/2 }, { w: IW, h: T15, d: ID }, nextId++);
+    mkCyl('barra', { x: cx, y: Math.min(estY - 0.05, 1.6), z: 0 }, BR, IW - 0.02, nextId++);
+  } else if (type === 'cajones') {
+    const cajonH = 0.2;
+    for (let i = 0; i < 3; i++) {
+      const cy = T15 + i*(cajonH + T15) + cajonH/2;
+      mkBox('cajon', { x: cx, y: cy, z: -T15/2 }, { w: IW - 0.01, h: cajonH - 0.005, d: ID - 0.02 }, nextId++);
+      mkBox('cajon_f', { x: cx, y: cy, z: d/2 - T15 + T18/2 }, { w: IW + 0.002, h: cajonH + T15 - 0.001, d: T18 }, nextId++);
+    }
+    const divY = T15 + 3*(cajonH + T15);
+    mkBox('estante', { x: cx, y: divY + T15/2, z: -T15/2 }, { w: IW, h: T15, d: ID }, nextId++);
+    mkCyl('barra', { x: cx, y: divY + T15 + (h - divY - T15*2)*0.45, z: 0 }, BR, IW - 0.02, nextId++);
+  } else if (type === 'estantes') {
+    const gap = (h - 2*T15) / 6;
+    for (let i = 1; i <= 5; i++) {
+      const ey = T15 + gap * i;
+      mkBox('estante', { x: cx, y: ey, z: -T15/2 }, { w: IW, h: T15, d: ID }, nextId++);
+    }
+  }
+  
+  if (hasDoors) {
+    const pW = w/2 - 0.003, pZ = d/2 + T18/2 + 0.002;
+    [-1, 1].forEach(s => {
+      mkBox('puerta', { x: cx + s * w/4, y: h/2, z: pZ }, { w: pW, h, d: T18 }, nextId++);
     });
-    body.appendChild(row);
   }
-
-  if (dimForm) {
-    body.appendChild(createDimForm());
-  }
-
-  wrap.appendChild(avatar);
-  wrap.appendChild(body);
-  container.appendChild(wrap);
-  container.scrollTop = container.scrollHeight;
+  if (hasBase) mkBox('zocalo', { x: cx, y: ZH/2, z: d/2 - T15/2 }, { w, h: ZH, d: T15 }, nextId++);
+  
+  modRegistry.push({ cx, w, h, d, hasDoors });
+  nextX = cx + w/2;
+  modCount++;
+  updateUI();
 }
 
-function createDimForm() {
-  const form = document.createElement('div');
-  form.className = 'dim-form';
-  form.innerHTML = `
-    <div class="dim-title">📐 Ingresa las medidas del espacio</div>
-    <div class="dim-grid">
-      <div class="dim-field">
-        <label>Alto</label>
-        <input type="number" id="dimAlto" placeholder="220" min="50" max="350">
-        <div class="unit">cm</div>
-      </div>
-      <div class="dim-field">
-        <label>Ancho</label>
-        <input type="number" id="dimAncho" placeholder="200" min="30" max="600">
-        <div class="unit">cm</div>
-      </div>
-      <div class="dim-field">
-        <label>Fondo / Prof.</label>
-        <input type="number" id="dimFondo" placeholder="60" min="20" max="120">
-        <div class="unit">cm</div>
-      </div>
-    </div>
-    <button class="dim-confirm" onclick="confirmMedidas()">Confirmar medidas →</button>
-  `;
-  return form;
+function mkBox(type, pos, size, id) {
+  const cfg = ET[type];
+  const mesh = new THREE.Mesh(new THREE.BoxGeometry(size.w, size.h, size.d), new THREE.MeshStandardMaterial({ color: cfg.c, roughness: 0.48 }));
+  mesh.position.set(pos.x, pos.y, pos.z);
+  mesh.castShadow = mesh.receiveShadow = true;
+  mesh.userData = { id, type };
+  group.add(mesh);
+  elements.push({ id, t: type, m: mesh, s: { ...size } });
+  return mesh;
 }
 
-function showTyping() {
-  const container = document.getElementById('chatMessages');
-  const wrap = document.createElement('div');
-  wrap.className = 'msg ai';
-  wrap.id = 'typing-indicator';
-  wrap.innerHTML = `<div class="msg-avatar">✦</div><div class="msg-body"><div class="msg-name" style="color:var(--gold)">CR Design IA</div><div class="msg-bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>`;
-  container.appendChild(wrap);
-  container.scrollTop = container.scrollHeight;
+function mkCyl(type, pos, r, len, id) {
+  const mesh = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, 12), new THREE.MeshStandardMaterial({ color: ET[type].c, metalness: 0.85 }));
+  mesh.rotation.z = Math.PI/2;
+  mesh.position.set(pos.x, pos.y, pos.z);
+  mesh.castShadow = true;
+  mesh.userData = { id, type };
+  group.add(mesh);
+  elements.push({ id, t: type, m: mesh, s: { w: len, h: r*2, d: r*2 } });
+  return mesh;
 }
 
-function removeTyping() {
-  const t = document.getElementById('typing-indicator');
-  if (t) t.remove();
-}
-
-function aiReply(msg, options = null, dimForm = false, delay = 1000) {
-  isTyping = true;
-  showTyping();
-  setTimeout(() => {
-    removeTyping();
-    addMessage('ai', msg, options, dimForm);
-    isTyping = false;
-  }, delay);
-}
-
-// ══════════════════════════════════════════════════════
-//  FLOW LOGIC
-// ══════════════════════════════════════════════════════
-function handleOptionSelect(val, label) {
-  addMessage('user', label);
-  const step = project.step;
-
-  if (step === 0) {
-    project.tipo = val;
-    project.step = 1;
-    updateProgress();
-    aiReply(`Excelente elección. Un **${label}** requiere atención especial al estilo.\n\n¿Qué estilo deseas para tu mueble?`, STYLES, false, 800);
-
-  } else if (step === 1) {
-    project.estilo = val;
-    project.step = 2;
-    updateProgress();
-    aiReply(`Perfecto, estilo **${val}**. Ahora hablemos de colores.\n\n¿Qué combinación de colores prefieres?`, ['Blanco + madera natural','Gris + negro','Madera oscura + negro','Blanco puro','Colores personalizados'], false, 900);
-
-  } else if (step === 2) {
-    project.colores = val;
-    project.step = 3;
-    updateProgress();
-    aiReply(`¡Combinación muy elegante! ¿Qué tipo de acabado prefieres para las superficies?`, ACABADOS, false, 800);
-
-  } else if (step === 3) {
-    project.acabado = val;
-    project.step = 4;
-    updateProgress();
-    aiReply(`Acabado **${val}** anotado. ¿Qué tipo de puertas deseas?`, DOOR_TYPES, false, 800);
-
-  } else if (step === 4) {
-    project.puertas = val;
-    project.step = 5;
-    updateProgress();
-    aiReply(`Puertas **${val}** registradas. ¿Cuántos cajones necesitas aproximadamente?`, ['Sin cajones','1-2 cajones','3-4 cajones','5-6 cajones','Más de 6'], false, 800);
-
-  } else if (step === 5) {
-    project.cajones = val;
-    project.step = 6;
-    updateProgress();
-    aiReply(`Perfecto. ¿Qué tipo de herrajes prefieres para tiradores y bisagras?`, HERRAJES_TYPES, false, 800);
-
-  } else if (step === 6) {
-    project.herrajes = val;
-    project.step = 7;
-    updateProgress();
-    aiReply(`Herrajes **${val}** confirmados. Ahora necesito las medidas exactas del espacio disponible.\n\nCompleta el formulario a continuación:`, null, true, 900);
-  }
-}
-
-function confirmMedidas() {
-  const alto = document.getElementById('dimAlto')?.value;
-  const ancho = document.getElementById('dimAncho')?.value;
-  const fondo = document.getElementById('dimFondo')?.value;
-  if (!alto || !ancho || !fondo) { alert('Por favor completa las tres medidas.'); return; }
-  project.alto = parseFloat(alto);
-  project.ancho = parseFloat(ancho);
-  project.fondo = parseFloat(fondo);
-  project.step = 8;
-  document.querySelectorAll('.dim-confirm').forEach(b => b.disabled = true);
-  addMessage('user', `Medidas: Alto ${alto}cm × Ancho ${ancho}cm × Fondo ${fondo}cm`);
-  updateProgress();
-  aiReply(`Medidas registradas. ¿Cómo quieres distribuir el interior?\n\nPuedes combinar varias opciones:`, ['Barra colgadora','Estantes fijos','Cajones','Zapatero','Espejo interior','LED interior','Pantalonero','Joyero'], false, 900);
-}
-
-function handleDistribution(val) {
-  project.distribucion = project.distribucion ? project.distribucion + ', ' + val : val;
-  project.step = 9;
-  updateProgress();
-  aiReply(`Distribución anotada: **${project.distribucion}**.\n\n¿Tienes alguna necesidad especial o imagen de referencia que quieras compartir?\n\n*(Puedes escribir detalles o adjuntar una imagen con el botón 📎)*`, null, false, 900);
-}
-
-function handleFreeText(text) {
-  if (project.step === 8) {
-    // distribution text
-    project.distribucion = text;
-    project.step = 9;
-    updateProgress();
-    aiReply(`Distribución anotada. ¿Tienes alguna necesidad especial o imagen de referencia?\n\n*(Puedes escribir o adjuntar imagen con el botón 📎)*`, null, false, 900);
-  } else if (project.step === 9) {
-    project.notas = text;
-    project.step = 10;
-    project.complete = true;
-    updateProgress();
-    setTimeout(() => generateSummary(), 500);
-  } else {
-    // Generic chat — call AI
-    callClaudeAPI(text);
-  }
-}
-
-// ══════════════════════════════════════════════════════
-//  CLAUDE API
-// ══════════════════════════════════════════════════════
-async function callClaudeAPI(userMessage) {
-  isTyping = true;
-  showTyping();
-  document.getElementById('sendBtn').disabled = true;
-
-  const systemPrompt = `Eres el asistente de diseño de muebles de CR Design Muebles, una empresa premium de muebles a medida en Colombia. 
-El cliente está diseñando: ${project.tipo ? 'un ' + project.tipo : 'un mueble'}.
-Datos del proyecto hasta ahora: ${JSON.stringify(project)}.
-Responde en español, de manera profesional y cálida. Máximo 3 párrafos cortos. 
-Si el cliente hace preguntas técnicas sobre materiales, proporciona información útil sobre aglomerado de 15mm, MDF, y acabados.`;
-
-  conversationHistory.push({ role: 'user', content: userMessage });
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: conversationHistory
-      })
-    });
-    const data = await response.json();
-    const reply = data.content?.[0]?.text || 'Entendido. ¿En qué más puedo ayudarte con tu proyecto?';
-    conversationHistory.push({ role: 'assistant', content: reply });
-    removeTyping();
-    addMessage('ai', reply);
-  } catch (e) {
-    removeTyping();
-    addMessage('ai', 'Entendido. ¿Hay algo más que quieras ajustar en tu diseño?');
-  }
-  isTyping = false;
-  document.getElementById('sendBtn').disabled = false;
-}
-
-// ══════════════════════════════════════════════════════
-//  SEND USER MESSAGE
-// ══════════════════════════════════════════════════════
-function sendUserMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text || isTyping) return;
-  input.value = '';
-  input.style.height = 'auto';
-  addMessage('user', text);
-
-  if (project.step >= 8 && project.step <= 9) {
-    handleFreeText(text);
-  } else {
-    callClaudeAPI(text);
-  }
-}
-
-// ══════════════════════════════════════════════════════
-//  TECHNICAL CALCULATION — 15mm AGLOMERADO
-// ══════════════════════════════════════════════════════
-function calcDespiece() {
-  if (!project.alto || !project.ancho || !project.fondo) return null;
-  const T = 1.5; // 15mm in cm
-  const H = project.alto, W = project.ancho, D = project.fondo;
-  const cols = Math.max(1, Math.round(W / 65));
-  const colW = (W - T * (cols + 1)) / cols;
-
-  const pieces = [];
-
-  // Carcasa
-  pieces.push({ nombre: 'Lateral izquierdo', cant: 1, ancho: D, largo: H, esp: '15mm', mat: 'Aglomerado' });
-  pieces.push({ nombre: 'Lateral derecho',   cant: 1, ancho: D, largo: H, esp: '15mm', mat: 'Aglomerado' });
-  pieces.push({ nombre: 'Techo',             cant: 1, ancho: D, largo: W - 2*T, esp: '15mm', mat: 'Aglomerado' });
-  pieces.push({ nombre: 'Suelo',             cant: 1, ancho: D, largo: W - 2*T, esp: '15mm', mat: 'Aglomerado' });
-  pieces.push({ nombre: 'Fondo (espaldar)',  cant: 1, ancho: H, largo: W, esp: '8mm',  mat: 'MDF delgado' });
-
-  // Divisiones verticales
-  if (cols > 1) pieces.push({ nombre: 'División vertical', cant: cols - 1, ancho: D - T, largo: H - 2*T, esp: '15mm', mat: 'Aglomerado' });
-
-  // Estantes
-  const shelvesPerCol = Math.floor((H - 60) / 35);
-  pieces.push({ nombre: 'Estante interior', cant: cols * shelvesPerCol, ancho: D - T, largo: colW, esp: '15mm', mat: 'Aglomerado' });
-
-  // Puertas
-  if (project.puertas && project.puertas !== 'Sin puertas') {
-    const doorW = W / (cols * 2);
-    const doorH = H - 1;
-    pieces.push({ nombre: 'Puerta', cant: cols * 2, ancho: doorW, largo: doorH, esp: '18mm', mat: 'Aglomerado' });
-  }
-
-  // Cajones
-  const numCajones = project.cajones === 'Sin cajones' ? 0 :
-    project.cajones === '1-2 cajones' ? 2 :
-    project.cajones === '3-4 cajones' ? 3 :
-    project.cajones === '5-6 cajones' ? 5 : 2;
-
-  if (numCajones > 0) {
-    const cajonH = 18;
-    const cajonW = colW - 2;
-    pieces.push({ nombre: 'Frente de cajón',     cant: numCajones, ancho: cajonW + 2, largo: cajonH + 2, esp: '18mm', mat: 'Aglomerado' });
-    pieces.push({ nombre: 'Lateral cajón (x2)',  cant: numCajones * 2, ancho: D - 5, largo: cajonH - 2, esp: '15mm', mat: 'Aglomerado' });
-    pieces.push({ nombre: 'Fondo cajón',         cant: numCajones, ancho: cajonW - 2, largo: D - 5, esp: '8mm', mat: 'MDF' });
-  }
-
-  return pieces;
-}
-
-function calcHerrajes() {
-  if (!project.ancho || !project.alto) return [];
-  const cols = Math.max(1, Math.round(project.ancho / 65));
-  const shelvesPerCol = Math.floor((project.alto - 60) / 35);
-  const hasDoors = project.puertas && project.puertas !== 'Sin puertas';
-  const numDoors = hasDoors ? cols * 2 : 0;
-  const numCajones = project.cajones === 'Sin cajones' ? 0 :
-    project.cajones === '1-2 cajones' ? 2 :
-    project.cajones === '3-4 cajones' ? 3 :
-    project.cajones === '5-6 cajones' ? 5 : 2;
-
-  const items = [];
-  if (numDoors > 0) {
-    if (project.puertas === 'Correderas') {
-      items.push({ nombre: 'Kit correderas para puertas', qty: `${Math.ceil(numDoors/2)} kit` });
-    } else {
-      items.push({ nombre: `Bisagras ${project.herrajes || 'estándar'}`, qty: `${numDoors * 2} uds` });
-      items.push({ nombre: `Tiradores ${project.herrajes || 'dorados'}`, qty: `${numDoors} uds` });
-    }
-    items.push({ nombre: 'Amortiguadores de puerta', qty: `${numDoors * 2} uds` });
-  }
-  items.push({ nombre: 'Clavijas/tarugos de ensamble', qty: `${cols * 20} uds` });
-  items.push({ nombre: 'Tornillos confirmat 7×50mm', qty: `${cols * 16} uds` });
-  items.push({ nombre: 'Tornillos 3.5×16mm', qty: `${cols * 30} uds` });
-  items.push({ nombre: 'Tapacanto ABS 1mm', qty: `${Math.ceil((project.alto + project.ancho) * 4 / 100)} ml` });
-  items.push({ nombre: 'Soportes de estante regulables', qty: `${cols * shelvesPerCol * 4} uds` });
-  if (numCajones > 0) {
-    items.push({ nombre: 'Correderas telescópicas 45cm', qty: `${numCajones} pares` });
-    items.push({ nombre: `Tiradores cajón ${project.herrajes || 'dorados'}`, qty: `${numCajones} uds` });
-  }
-  if (project.distribucion?.includes('Barra')) {
-    const cols2 = Math.max(1, Math.round(project.ancho / 65));
-    items.push({ nombre: 'Barra colgar Ø25mm cromada', qty: `${cols2} × ${Math.round(project.ancho / cols2 - 4)}cm` });
-    items.push({ nombre: 'Soporte para barra colgadora', qty: `${cols2 * 2} uds` });
-  }
-  if (project.distribucion?.includes('LED')) items.push({ nombre: 'Tira LED 12V cálida', qty: `${Math.ceil(project.ancho * 3 / 100)} ml` });
-
-  return items;
-}
-
-function calcTableros() {
-  if (!project.alto || !project.ancho || !project.fondo) return null;
-  const pieces = calcDespiece();
-  if (!pieces) return null;
-  const tablerosArea = 244 * 122; // cm² por tablero estándar
-  let totalArea = 0;
-  pieces.forEach(p => {
-    if (p.esp !== '8mm') totalArea += p.ancho * p.largo * p.cant;
-  });
-  return { tableros: Math.ceil(totalArea / tablerosArea * 1.12), area: Math.round(totalArea) };
-}
-
-// ══════════════════════════════════════════════════════
-//  GENERATE SUMMARY
-// ══════════════════════════════════════════════════════
-function generateSummary() {
-  isTyping = true;
-  showTyping();
-  setTimeout(() => {
-    removeTyping();
-    const pieces = calcDespiece();
-    const herrajes = calcHerrajes();
-    const tableros = calcTableros();
-    const cols = project.ancho ? Math.max(1, Math.round(project.ancho / 65)) : '—';
-
-    addMessage('ai',
-      `✅ **Proyecto completo.** He procesado todos los datos de tu ${project.tipo || 'mueble'}.\n\n` +
-      `📐 **Dimensiones:** ${project.ancho}×${project.alto}×${project.fondo} cm\n` +
-      `🔲 **Columnas:** ${cols} módulo(s)\n` +
-      `📋 **Piezas calculadas:** ${pieces?.length || 0} elementos (15mm aglomerado)\n` +
-      `📦 **Tableros estimados:** ${tableros?.tableros || '—'} tableros 244×122cm\n\n` +
-      `El despiece técnico completo, los herrajes y los materiales ya están disponibles en el panel derecho. Puedes enviarme el proyecto completo con el botón de abajo.`
-    );
-
-    updateRightPanel();
-    document.getElementById('sendProjectBtn').disabled = false;
-    isTyping = false;
-  }, 1800);
-}
-
-// ══════════════════════════════════════════════════════
-//  RIGHT PANEL
-// ══════════════════════════════════════════════════════
-let currentRpTab = 'resumen';
-
-function switchRpTab(tab, el) {
-  currentRpTab = tab;
-  document.querySelectorAll('.rp-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  updateRightPanel();
-}
-
-function updateRightPanel() {
-  const content = document.getElementById('rpContent');
-  const pieces = calcDespiece();
-  const herrajes = calcHerrajes();
-  const tableros = calcTableros();
-  const progress = getProgress();
-
-  if (currentRpTab === 'resumen') {
-    content.innerHTML = `
-      <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
-      <div class="progress-label">${progress}% completado</div>
-      <div class="proj-section">
-        <div class="proj-heading"><div class="dot"></div>Tipo de mueble</div>
-        <div class="info-row"><span class="info-k">Tipo</span><span class="info-v">${project.tipo || '—'}</span></div>
-        <div class="info-row"><span class="info-k">Estilo</span><span class="info-v">${project.estilo || '—'}</span></div>
-        <div class="info-row"><span class="info-k">Colores</span><span class="info-v">${project.colores || '—'}</span></div>
-        <div class="info-row"><span class="info-k">Acabado</span><span class="info-v">${project.acabado || '—'}</span></div>
-        <div class="info-row"><span class="info-k">Puertas</span><span class="info-v">${project.puertas || '—'}</span></div>
-        <div class="info-row"><span class="info-k">Cajones</span><span class="info-v">${project.cajones || '—'}</span></div>
-        <div class="info-row"><span class="info-k">Herrajes</span><span class="info-v">${project.herrajes || '—'}</span></div>
-      </div>
-      <div class="proj-section">
-        <div class="proj-heading"><div class="dot"></div>Medidas</div>
-        <div class="info-row"><span class="info-k">Alto</span><span class="info-v">${project.alto ? project.alto + ' cm' : '—'}</span></div>
-        <div class="info-row"><span class="info-k">Ancho</span><span class="info-v">${project.ancho ? project.ancho + ' cm' : '—'}</span></div>
-        <div class="info-row"><span class="info-k">Fondo</span><span class="info-v">${project.fondo ? project.fondo + ' cm' : '—'}</span></div>
-        <div class="info-row"><span class="info-k">Módulos</span><span class="info-v">${project.ancho ? Math.max(1, Math.round(project.ancho / 65)) : '—'}</span></div>
-      </div>
-      ${tableros ? `
-      <div class="proj-section">
-        <div class="proj-heading"><div class="dot"></div>Material estimado</div>
-        <div class="info-row"><span class="info-k">Tableros 244×122</span><span class="info-v">${tableros.tableros} uds</span></div>
-        <div class="info-row"><span class="info-k">Área total</span><span class="info-v">${tableros.area} cm²</span></div>
-        <div class="info-row"><span class="info-k">Material</span><span class="info-v">Aglomerado 15mm</span></div>
-        <div class="info-row"><span class="info-k">Espaldar</span><span class="info-v">MDF 8mm</span></div>
-      </div>` : ''}
-      <div class="proj-section">
-        <div class="proj-heading"><div class="dot"></div>Distribución</div>
-        <div style="font-size:11px;color:var(--tx);line-height:1.7">${project.distribucion || '<span style="color:var(--muted)">Pendiente</span>'}</div>
-      </div>
-      ${project.notas ? `<div class="proj-section"><div class="proj-heading"><div class="dot"></div>Notas del cliente</div><div style="font-size:11px;color:var(--tx);line-height:1.7">${project.notas}</div></div>` : ''}
-    `;
-  } else if (currentRpTab === 'despiece') {
-    if (!pieces) {
-      content.innerHTML = '<div class="empty-panel"><div class="empty-icon">📋</div><div>El despiece se genera<br>cuando ingreses las medidas</div></div>';
-      return;
-    }
-    content.innerHTML = `
-      <div style="font-size:9px;color:var(--muted);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase">Material base: Aglomerado 15mm · MDF espaldar 8mm</div>
-      <table class="pieces-table">
-        <thead><tr><th>#</th><th>Pieza</th><th>A × L (cm)</th><th>Esp.</th><th>Cant.</th></tr></thead>
-        <tbody>
-          ${pieces.map((p, i) => `<tr>
-            <td class="piece-num">${i+1}</td>
-            <td>${p.nombre}</td>
-            <td style="font-family:'DM Mono',monospace;font-size:9px">${p.ancho.toFixed(1)} × ${p.largo.toFixed(1)}</td>
-            <td>${p.esp}</td>
-            <td>${p.cant}</td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-      <div style="margin-top:12px;padding:10px;background:var(--sf2);border:1px solid var(--bd);border-radius:4px;font-size:10px;color:var(--muted);line-height:1.7">
-        <strong style="color:var(--gold)">Nota técnica:</strong> Medidas incluyen tolerancias de 1mm. 
-        El tapacanto ABS de 1mm debe aplicarse en todos los cantos visibles. 
-        Optimizar corte para minimizar desperdicio de material.
-      </div>
-    `;
-  } else if (currentRpTab === 'herrajes') {
-    if (!herrajes || herrajes.length === 0) {
-      content.innerHTML = '<div class="empty-panel"><div class="empty-icon">🔩</div><div>Los herrajes se calculan<br>al completar el diseño</div></div>';
-      return;
-    }
-    content.innerHTML = `
-      <div style="font-size:9px;color:var(--muted);margin-bottom:12px;letter-spacing:0.08em;text-transform:uppercase">Lista completa de herrajes y accesorios</div>
-      ${herrajes.map(h => `
-        <div class="herraje-item">
-          <span class="herraje-name">${h.nombre}</span>
-          <span class="herraje-qty">${h.qty}</span>
-        </div>
-      `).join('')}
-      <div style="margin-top:12px;padding:10px;background:var(--sf2);border:1px solid var(--bd);border-radius:4px;font-size:10px;color:var(--muted)">
-        <strong style="color:var(--gold)">Herraje:</strong> ${project.herrajes || 'Estándar'} · ${project.puertas || 'Sin puertas'}
-      </div>
-    `;
-  }
-}
-
-function getProgress() {
-  const keys = ['tipo','estilo','colores','acabado','puertas','cajones','herrajes','alto','distribucion'];
-  const filled = keys.filter(k => project[k] !== null).length;
-  return Math.round((filled / keys.length) * 100);
-}
-
-function updateProgress() {
-  if (project.step >= 7) updateRightPanel();
+function updateUI() {
+  document.getElementById('st').textContent = elements.length;
+  document.getElementById('ss').textContent = selected.size;
+  document.getElementById('sm').textContent = modCount;
+  const list = document.getElementById('el-list');
+  if (elements.length === 0) list.innerHTML = '<div class="empty"><div class="empty-i">◻</div>Sin elementos</div>';
   else {
-    const content = document.getElementById('rpContent');
-    const p = getProgress();
-    const bar = content.querySelector('.progress-fill');
-    if (bar) bar.style.width = p + '%';
+    list.innerHTML = '';
+    elements.forEach(el => {
+      const cfg = ET[el.t] || { n: el.t, i: '◻' };
+      const div = document.createElement('div');
+      div.className = 'eli' + (selected.has(el) ? ' sel' : '');
+      div.innerHTML = `<div class="eii">${cfg.i}</div><span class="ein">${cfg.n}</span><span class="eid">#${el.id}</span><button class="eeb" data-id="${el.id}">✏</button>`;
+      div.onclick = (e) => { if(!e.target.closest('.eeb')){ selected.clear(); selected.add(el); updateSel(); } };
+      div.querySelector('.eeb').onclick = (e) => { e.stopPropagation(); selected.clear(); selected.add(el); updateSel(); };
+      list.appendChild(div);
+    });
   }
-  updateRightPanel();
 }
 
-// ══════════════════════════════════════════════════════
-//  SEND EMAIL
-// ══════════════════════════════════════════════════════
-function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
-function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
-
-function buildEmailBody(name, phone, email, city, notes) {
-  const pieces = calcDespiece();
-  const herrajes = calcHerrajes();
-  const tableros = calcTableros();
-  const piecesText = pieces ? pieces.map((p,i) => `  ${i+1}. ${p.nombre}: ${p.ancho.toFixed(1)}×${p.largo.toFixed(1)}cm | ${p.esp} | ${p.cant} ud(s)`).join('\n') : 'Pendiente';
-  const herrajesText = herrajes ? herrajes.map(h => `  · ${h.nombre}: ${h.qty}`).join('\n') : 'Pendiente';
-
-  return `Hola CR Design Muebles,
-
-Nuevo proyecto generado desde el Asistente IA.
-
-━━━━━━━━━━━━━━━━━━━━━━
-DATOS DEL CLIENTE
-━━━━━━━━━━━━━━━━━━━━━━
-Nombre:    ${name}
-Teléfono:  ${phone}
-Email:     ${email || '—'}
-Ciudad:    ${city || '—'}
-
-━━━━━━━━━━━━━━━━━━━━━━
-DISEÑO DEL MUEBLE
-━━━━━━━━━━━━━━━━━━━━━━
-Tipo:       ${project.tipo || '—'}
-Estilo:     ${project.estilo || '—'}
-Colores:    ${project.colores || '—'}
-Acabado:    ${project.acabado || '—'}
-Puertas:    ${project.puertas || '—'}
-Cajones:    ${project.cajones || '—'}
-Herrajes:   ${project.herrajes || '—'}
-
-━━━━━━━━━━━━━━━━━━━━━━
-MEDIDAS
-━━━━━━━━━━━━━━━━━━━━━━
-Alto:    ${project.alto || '—'} cm
-Ancho:   ${project.ancho || '—'} cm
-Fondo:   ${project.fondo || '—'} cm
-Módulos: ${project.ancho ? Math.max(1, Math.round(project.ancho / 65)) : '—'}
-
-Distribución interior: ${project.distribucion || '—'}
-
-━━━━━━━━━━━━━━━━━━━━━━
-DESPIECE TÉCNICO (15mm Aglomerado)
-━━━━━━━━━━━━━━━━━━━━━━
-${piecesText}
-
-Material total: ${tableros ? tableros.tableros + ' tableros 244×122cm' : '—'}
-
-━━━━━━━━━━━━━━━━━━━━━━
-HERRAJES Y ACCESORIOS
-━━━━━━━━━━━━━━━━━━━━━━
-${herrajesText}
-
-━━━━━━━━━━━━━━━━━━━━━━
-NOTAS DEL CLIENTE
-━━━━━━━━━━━━━━━━━━━━━━
-${project.notas || '—'}
-${notes ? '\nNotas adicionales: ' + notes : ''}
-
-Gracias,
-${name}`;
+function updateSel() {
+  if (selected.size === 1) {
+    const el = Array.from(selected)[0];
+    tcontrol.attach(el.m);
+    document.getElementById('tp').style.display = 'block';
+    const p = el.m.position;
+    document.getElementById('px').value = (p.x*100).toFixed(1);
+    document.getElementById('py').value = (p.y*100).toFixed(1);
+    document.getElementById('pz').value = (p.z*100).toFixed(1);
+    document.getElementById('sw').value = (el.s.w*100).toFixed(1);
+    document.getElementById('sh').value = (el.s.h*100).toFixed(1);
+    document.getElementById('sd').value = (el.s.d*100).toFixed(1);
+    document.getElementById('sel-info').innerHTML = `<span style="color:var(--gold)">${ET[el.t]?.n} #${el.id}</span>`;
+  } else {
+    tcontrol.detach();
+    document.getElementById('tp').style.display = 'none';
+    document.getElementById('sel-info').textContent = selected.size > 1 ? `${selected.size} elementos` : 'Ningún elemento';
+  }
+  const si = document.getElementById('si');
+  if (selected.size > 1) {
+    si.classList.add('show');
+    document.getElementById('si-t').textContent = `${selected.size} seleccionados`;
+    document.getElementById('multi-badge').style.display = 'block';
+    document.getElementById('mc-lbl').textContent = `${selected.size} seleccionados`;
+  } else {
+    si.classList.remove('show');
+    document.getElementById('multi-badge').style.display = 'none';
+  }
+  updateUI();
 }
 
-function sendEmail() {
-  const name = document.getElementById('cName').value.trim();
-  const phone = document.getElementById('cPhone').value.trim();
-  const email = document.getElementById('cEmail').value.trim();
-  const city = document.getElementById('cCity').value.trim();
-  const notes = document.getElementById('cNotes').value.trim();
-  if (!name || !phone) { alert('Nombre y teléfono son obligatorios.'); return; }
-  const body = buildEmailBody(name, phone, email, city, notes);
-  const subject = encodeURIComponent(`Proyecto CR Design IA — ${project.tipo || 'Mueble'} — ${name}`);
-  window.location.href = `mailto:miguel_716@hotmail.com?subject=${subject}&body=${encodeURIComponent(body)}`;
-  closeModal();
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4000);
-}
-
-function sendWA() {
-  const pieces = calcDespiece();
-  const tableros = calcTableros();
-  const txt = `Hola CR Design Muebles! Diseñé mi mueble en el asistente IA:\n\n` +
-    `📐 ${project.tipo || 'Mueble'} ${project.estilo || ''}\n` +
-    `📏 ${project.ancho || '?'}×${project.alto || '?'}×${project.fondo || '?'} cm\n` +
-    `🚪 Puertas: ${project.puertas || '—'}\n` +
-    `🎨 Color: ${project.colores || '—'} | Acabado: ${project.acabado || '—'}\n` +
-    `📦 Piezas: ${pieces?.length || 0} | Tableros: ${tableros?.tableros || '?'}\n\n` +
-    `¿Pueden enviarme un presupuesto?`;
-  window.open(`https://wa.me/573146309609?text=${encodeURIComponent(txt)}`, '_blank');
-}
-
-// ══════════════════════════════════════════════════════
-//  INPUT AUTO-RESIZE + ENTER
-// ══════════════════════════════════════════════════════
-const chatInput = document.getElementById('chatInput');
-chatInput.addEventListener('input', () => {
-  chatInput.style.height = 'auto';
-  chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
-});
-chatInput.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendUserMessage(); }
-});
-
-// File upload
-document.getElementById('file-input').addEventListener('change', e => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const container = document.getElementById('chatMessages');
-    const wrap = document.createElement('div');
-    wrap.className = 'msg user';
-    wrap.innerHTML = `<div class="msg-avatar">👤</div><div class="msg-body"><div class="msg-name">Tú</div><div class="msg-bubble">Imagen de referencia adjuntada<br><img src="${ev.target.result}" class="img-preview" alt="Referencia"></div></div>`;
-    container.appendChild(wrap);
-    container.scrollTop = container.scrollHeight;
-    aiReply('¡Gracias por la imagen de referencia! La tendré en cuenta para el diseño. ¿Hay algún detalle específico de esta imagen que quieras replicar?', null, false, 1000);
-  };
-  reader.readAsDataURL(file);
-});
-
-// ══════════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════════
 function init() {
-  const container = document.getElementById('chatMessages');
-
-  // Welcome card
-  const welcome = document.createElement('div');
-  welcome.className = 'msg ai';
-  welcome.style.maxWidth = '100%';
-  welcome.innerHTML = `
-    <div class="msg-avatar">✦</div>
-    <div class="msg-body" style="flex:1">
-      <div class="msg-name" style="color:var(--gold)">CR Design IA</div>
-      <div class="msg-bubble" style="background:linear-gradient(135deg,rgba(200,168,112,0.08),rgba(200,168,112,0.02));border:1px solid rgba(200,168,112,0.22);border-radius:2px 12px 12px 12px">
-        <div style="font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--cream);margin-bottom:8px">Bienvenido a <span style="color:var(--gold)">CR Design</span> 👋</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Soy tu asistente de diseño de muebles a medida. Voy a ayudarte a diseñar tu mueble paso a paso, calculando automáticamente el <strong style="color:var(--tx)">despiece técnico</strong>, los <strong style="color:var(--tx)">herrajes</strong> y los <strong style="color:var(--tx)">materiales</strong>.</div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px">Todo trabajado en <strong style="color:var(--gold)">centímetros</strong> con material de <strong style="color:var(--gold)">aglomerado 15mm</strong>.</div>
-      </div>
-    </div>
-  `;
-  container.appendChild(welcome);
-
-  setTimeout(() => {
-    addMessage('ai',
-      '¿Qué tipo de mueble deseas diseñar hoy?',
-      FURNITURE_TYPES, false
-    );
-  }, 600);
+  const container = document.getElementById('cw');
+  const w = container.clientWidth, h = container.clientHeight;
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0a0a0b);
+  scene.fog = new THREE.Fog(0x0a0a0b, 14, 28);
+  camera = new THREE.PerspectiveCamera(42, w/h, 0.05, 60);
+  camera.position.set(3.5, 2.2, 5);
+  renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+  renderer.setSize(w, h);
+  renderer.shadowMap.enabled = true;
+  container.appendChild(renderer.domElement);
+  orbit = new OrbitControls(camera, renderer.domElement);
+  orbit.enableDamping = true;
+  orbit.target.set(0, 1.1, 0);
+  // Luces
+  scene.add(new THREE.AmbientLight(0x504844, 0.9));
+  const dirLight = new THREE.DirectionalLight(0xfff5e8, 1.35);
+  dirLight.position.set(6, 10, 5);
+  dirLight.castShadow = true;
+  dirLight.shadow.mapSize.width = dirLight.shadow.mapSize.height = 2048;
+  scene.add(dirLight);
+  scene.add(new THREE.DirectionalLight(0x8090c0, 0.3).position.set(-5, 3, -3));
+  scene.add(new THREE.PointLight(0xc8b890, 0.45, 14).position.set(-2, 4, 4));
+  // Suelo
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ color: 0x111113, roughness: 0.95 }));
+  floor.rotation.x = -Math.PI/2;
+  floor.receiveShadow = true;
+  scene.add(floor);
+  scene.add(new THREE.GridHelper(18, 26, 0x1c1c22, 0x141418).position.y = 0.001);
+  scene.add(group);
+  tcontrol = new TransformControls(camera, renderer.domElement);
+  tcontrol.addEventListener('dragging-changed', e => orbit.enabled = !e.value);
+  tcontrol.addEventListener('objectChange', () => {
+    if(selected.size===1){
+      const el=Array.from(selected)[0]; const p=el.m.position;
+      document.getElementById('px').value=(p.x*100).toFixed(1);
+      document.getElementById('py').value=(p.y*100).toFixed(1);
+      document.getElementById('pz').value=(p.z*100).toFixed(1);
+    }
+  });
+  scene.add(tcontrol);
+  // Click para seleccionar
+  renderer.domElement.addEventListener('click', (e) => {
+    const rect = renderer.domElement.getBoundingClientRect();
+    const mx = ((e.clientX - rect.left)/rect.width)*2 - 1;
+    const my = -((e.clientY - rect.top)/rect.height)*2 + 1;
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(new THREE.Vector2(mx, my), camera);
+    const hits = raycaster.intersectObjects(elements.map(x => x.m));
+    if (hits.length) {
+      const el = elements.find(x => x.m === hits[0].object);
+      if (el) {
+        if (e.ctrlKey || e.metaKey) selected.has(el) ? selected.delete(el) : selected.add(el);
+        else { selected.clear(); selected.add(el); }
+        updateSel();
+      }
+    } else if (!e.ctrlKey && !e.metaKey) { selected.clear(); updateSel(); }
+    updateUI();
+  });
+  
+  function animate() { requestAnimationFrame(animate); orbit.update(); renderer.render(scene, camera); }
+  animate();
+  updateUI();
+  window.addEventListener('resize', () => {
+    const w = container.clientWidth, h = container.clientHeight;
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  });
 }
+
+// Eventos UI
+document.getElementById('mod-colgador').onclick = () => { currentType='colgador'; document.getElementById('mm').classList.add('show'); };
+document.getElementById('mod-cajones').onclick = () => { currentType='cajones'; document.getElementById('mm').classList.add('show'); };
+document.getElementById('mod-estantes').onclick = () => { currentType='estantes'; document.getElementById('mm').classList.add('show'); };
+document.getElementById('mod-maletas').onclick = () => { currentType='maletas'; document.getElementById('mm').classList.add('show'); };
+document.getElementById('mod-basico').onclick = () => { currentType='basico'; document.getElementById('mm').classList.add('show'); };
+document.getElementById('cancel-mod').onclick = () => document.getElementById('mm').classList.remove('show');
+document.getElementById('confirm-mod').onclick = () => {
+  const w = parseFloat(document.getElementById('pm-w').value)/100;
+  const h = parseFloat(document.getElementById('pm-h').value)/100;
+  const d = parseFloat(document.getElementById('pm-d').value)/100;
+  const doors = document.getElementById('opt-puertas').checked;
+  const base = document.getElementById('opt-zocalo').checked;
+  if (!isNaN(w) && !isNaN(h) && !isNaN(d) && w>0 && h>0 && d>0) {
+    genModule(currentType, w, h, d, doors, base);
+    document.getElementById('mm').classList.remove('show');
+    camera.position.set(nextX/2 + 3.5, 2.8, 5);
+    orbit.target.set(nextX/2, 1.1, 0);
+    orbit.update();
+  }
+};
+document.getElementById('ext-puertas').onclick = () => {
+  const pending = modRegistry.filter(m => !m.hasDoors);
+  if(pending.length) { const m = pending[0]; genModule('puertas', m.w, m.h, m.d, true, false); m.hasDoors=true; updateUI(); }
+  else alert('No hay módulos sin puertas');
+};
+document.getElementById('ext-zocalo').onclick = () => {
+  if(nextX>0) mkBox('zocalo', { x: nextX/2, y: ZH/2, z: lastModD/2 - T15/2 }, { w: nextX, h: ZH, d: T15 }, nextId++);
+  else alert('Genera un módulo primero');
+  updateUI();
+};
+document.getElementById('ext-tapeta').onclick = () => {
+  if(nextX>0) mkBox('tapeta', { x: nextX/2, y: lastModH + TAP/2, z: 0 }, { w: nextX + T15, h: TAP, d: lastModD }, nextId++);
+  else alert('Genera un módulo primero');
+  updateUI();
+};
+document.getElementById('ext-barra').onclick = () => { mkCyl('barra', { x: nextX/2||0, y: 1.6, z:0 }, BR, 0.55, nextId++); updateUI(); };
+document.getElementById('ext-estante').onclick = () => { mkBox('estante', { x: nextX/2||0, y: 1.1, z:0 }, { w: 0.55, h: T15, d: 0.55 }, nextId++); updateUI(); };
+document.getElementById('ext-cajon').onclick = () => { mkBox('cajon', { x: nextX/2||0, y: 0.25, z:0 }, { w: 0.55, h: 0.2, d: 0.55 }, nextId++); updateUI(); };
+document.getElementById('clear-sel').onclick = () => { selected.clear(); tcontrol.detach(); updateSel(); };
+document.getElementById('delete-sel').onclick = () => {
+  selected.forEach(el => { const i = elements.findIndex(x => x.id === el.id); if(i!==-1){ group.remove(el.m); elements.splice(i,1); } });
+  selected.clear(); tcontrol.detach();
+  if(elements.length===0){ modRegistry=[]; nextX=0; modCount=0; nextId=1; }
+  updateSel(); updateUI();
+};
+document.querySelectorAll('[data-view]').forEach(btn => {
+  btn.onclick = () => {
+    const cx = nextX/2||0;
+    const v = btn.getAttribute('data-view');
+    const views = { front: [cx, 1.4, 6, cx, 1.1, 0], side: [5, 1.4, cx, 0, 1.1, cx], top: [cx, 7, 0.1, cx, 0, 0], iso: [cx+3.5, 2.8, 5, cx, 1.1, 0] };
+    const vd = views[v] || views.iso;
+    camera.position.set(vd[0], vd[1], vd[2]);
+    orbit.target.set(vd[3], vd[4], vd[5]);
+    orbit.update();
+  };
+});
+document.getElementById('reset-view').onclick = () => {
+  const cx = nextX/2||0;
+  camera.position.set(cx+3.5, 2.8, 5);
+  orbit.target.set(cx, 1.1, 0);
+  orbit.update();
+};
+document.getElementById('px').onchange = () => {
+  if(selected.size===1){
+    const el=Array.from(selected)[0];
+    el.m.position.x = parseFloat(document.getElementById('px').value)/100;
+  }
+};
+document.getElementById('py').onchange = () => {
+  if(selected.size===1){
+    const el=Array.from(selected)[0];
+    el.m.position.y = parseFloat(document.getElementById('py').value)/100;
+  }
+};
+document.getElementById('pz').onchange = () => {
+  if(selected.size===1){
+    const el=Array.from(selected)[0];
+    el.m.position.z = parseFloat(document.getElementById('pz').value)/100;
+  }
+};
+document.getElementById('sw').onchange = () => {
+  if(selected.size===1){
+    const el=Array.from(selected)[0];
+    const w = parseFloat(document.getElementById('sw').value)/100;
+    const h = parseFloat(document.getElementById('sh').value)/100;
+    const d = parseFloat(document.getElementById('sd').value)/100;
+    const pos = el.m.position.clone();
+    group.remove(el.m);
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(w,h,d), new THREE.MeshStandardMaterial({ color: ET[el.t]?.c || 0xD4BC98, roughness: 0.48 }));
+    mesh.position.copy(pos);
+    mesh.castShadow = mesh.receiveShadow = true;
+    mesh.userData = { id: el.id, type: el.t };
+    group.add(mesh);
+    el.m = mesh;
+    el.s = { w, h, d };
+    tcontrol.attach(mesh);
+    updateUI();
+  }
+};
+document.getElementById('sh').onchange = () => document.getElementById('sw').onchange();
+document.getElementById('sd').onchange = () => document.getElementById('sw').onchange();
+
+document.getElementById('send-design').onclick = () => {
+  if(elements.length===0){ alert('No hay elementos para enviar'); return; }
+  document.getElementById('modal-send').classList.add('show');
+};
+document.getElementById('close-send').onclick = () => document.getElementById('modal-send').classList.remove('show');
+document.getElementById('do-send').onclick = () => {
+  const nm = document.getElementById('fn').value.trim();
+  const ph = document.getElementById('fp').value.trim();
+  if(!nm||!ph){ alert('Nombre y teléfono requeridos'); return; }
+  const spin = document.getElementById('fspin');
+  spin.style.display = 'block';
+  renderer.render(scene, camera);
+  const img = renderer.domElement.toDataURL('image/png');
+  let lista = '';
+  elements.forEach(e => lista += `${ET[e.t]?.n||e.t}: ${(e.s.w*100).toFixed(0)}x${(e.s.h*100).toFixed(0)}x${(e.s.d*100).toFixed(0)} cm\n`);
+  lista += `\nAncho total: ${(nextX*100).toFixed(0)} cm\nCliente: ${nm}\nTeléfono: ${ph}\nEmail: ${document.getElementById('fe').value||'-'}`;
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'https://formsubmit.co/miguel_716@hotmail.com';
+  form.style.display = 'none';
+  form.enctype = 'multipart/form-data';
+  const fields = [{name:'name',value:nm},{name:'email',value:document.getElementById('fe').value||'cliente@crmuebles.com'},{name:'_subject',value:`Diseño CR - ${nm}`},{name:'message',value:lista},{name:'_captcha',value:'false'}];
+  fields.forEach(f => { const i = document.createElement('input'); i.type='hidden'; i.name=f.name; i.value=f.value; form.appendChild(i); });
+  fetch(img).then(r=>r.blob()).then(b=>{
+    const file = new File([b], `diseño_${nm.replace(/\s/g,'_')}.png`, {type:'image/png'});
+    const fi = document.createElement('input'); fi.type='file'; fi.name='attachment';
+    const dt = new DataTransfer(); dt.items.add(file); fi.files = dt.files;
+    form.appendChild(fi); document.body.appendChild(form); form.submit();
+    setTimeout(()=>{ spin.style.display='none'; document.getElementById('modal-send').classList.remove('show'); alert('✓ Diseño enviado'); document.getElementById('fn').value=''; document.getElementById('fp').value=''; document.getElementById('fe').value=''; },2000);
+  }).catch(()=>{ spin.style.display='none'; alert('Error al enviar'); });
+};
 
 init();
 </script>
 </body>
 </html>
+
