@@ -66,7 +66,8 @@ canvas{display:block;width:100%;height:100%}
   <div class="sec"><div class="slbl">Vista</div><div class="vg">
     <div class="vb" data-v="front">◀ Frontal</div><div class="vb" data-v="side">▶ Lateral</div>
     <div class="vb" data-v="top">↑ Superior</div><div class="vb" data-v="iso">◈ Isométrica</div>
-    <div class="vb" id="tgd">🚪 Ocultar puertas</div><div class="vb" id="tge">💥 Vista despiece</div></div></div>
+    <div class="vb" id="tgd">🚪 Ocultar puertas</div><div class="vb" id="tge">💥 Vista despiece</div>
+    <div class="vb" id="rt" style="grid-column:1/3">✨ Trazado de rayos (foto realista)</div></div></div>
 </div>
 <div id="sr">
   <div class="sec"><div class="slbl">Resumen</div><div id="sum"></div></div>
@@ -79,11 +80,12 @@ canvas{display:block;width:100%;height:100%}
   <div class="fr"><label class="fl">Email</label><input id="fe" type="email" class="ni"></div>
   <div class="ma"><button id="cs">Cancelar</button><button class="bp" id="ds">Enviar</button></div></div></div>
 
-<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.128.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.128.0/examples/jsm/"}}</script>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/","three/examples/jsm/":"https://unpkg.com/three@0.160.0/examples/jsm/","three-mesh-bvh":"https://unpkg.com/three-mesh-bvh@0.7.6/build/index.module.js","three-mesh-bvh/":"https://unpkg.com/three-mesh-bvh@0.7.6/","three-gpu-pathtracer":"https://unpkg.com/three-gpu-pathtracer@0.0.23/build/index.module.js"}}</script>
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 /* ============================================================
    CR SMART DESIGN v2 — todo en milímetros.
@@ -100,21 +102,43 @@ import { TransformControls } from 'three/addons/controls/TransformControls.js';
    ============================================================ */
 const T = 15;
 const FIN = { Roble: 0xD4BC98, Blanco: 0xEFEDE8, Nogal: 0x7A5538, Grafito: 0x4A4A50 };
-const KN = { panel:'Panel', balda:'Balda', puerta:'Puerta', frente:'Frente cajón', cajon:'Cajón', zocalo:'Zócalo', trasera:'Trasera', encimera:'Encimera', barra:'Barra' };
+const KN = { panel:'Panel', balda:'Balda', puerta:'Puerta', frente:'Frente cajón', cajon:'Cajón', zocalo:'Zócalo', trasera:'Trasera', encimera:'Encimera', barra:'Barra', tirador:'Tirador' };
 const SHEET = new Set(['panel','balda','puerta','frente','zocalo','trasera','encimera']);
 const TYPES = {};
+/* Texturas de madera procedurales (sin imágenes externas) */
+function woodTex(base, dark) {
+  const c = document.createElement('canvas'); c.width = c.height = 512; const x = c.getContext('2d');
+  x.fillStyle = base; x.fillRect(0,0,512,512);
+  for (let i = 0; i < 260; i++) {
+    const y = Math.random()*512; x.strokeStyle = dark; x.globalAlpha = .04 + Math.random()*.09; x.lineWidth = .5 + Math.random()*2.2;
+    x.beginPath(); x.moveTo(0, y);
+    for (let u = 0; u <= 512; u += 32) x.lineTo(u, y + Math.sin(u*.02 + i)*3 + Math.random()*1.2);
+    x.stroke();
+  }
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+const FINT = { Roble: () => woodTex('#d4bc98','#8a6a3a'), Nogal: () => woodTex('#7a5538','#2c1a0c') }, TEX = {};
+const tex = n => (FINT[n] && !TEX[n] && (TEX[n] = FINT[n]()), TEX[n] || null);
+function mat(k, col, w, h, d) {
+  if (k === 'barra' || k === 'tirador') return new THREE.MeshPhysicalMaterial({ color:0xc9ccd1, metalness:1, roughness:.28 });
+  if (k === 'encimera') return new THREE.MeshPhysicalMaterial({ color:0x2d2d33, roughness:.22, clearcoat:.6, clearcoatRoughness:.15 });
+  if (k === 'cajon') return new THREE.MeshStandardMaterial({ color:col, roughness:.7 });
+  const o = { color:0xffffff, roughness:.5, clearcoat:.15, clearcoatRoughness:.4 }, t = tex(fin);
+  if (t) { o.map = t.clone(); o.map.needsUpdate = true; o.map.repeat.set(Math.max(w,h,d)/700, 1); } else o.color = col;
+  return new THREE.MeshPhysicalMaterial(o);
+}
 const $ = id => document.getElementById(id);
 let fin = 'Roble', cur = 'armario', P = {}, els = [], sel = null, CM = '', ready = false;
-let scene, camera, renderer, orbit, tc, EX = false, HD = false;
+let scene, camera, renderer, orbit, tc, EX = false, HD = false, PT = null, ENV, GR;
 const group = new THREE.Group();
 
 /* ---------- Primitivas ---------- */
 function add(k, x, y, z, w, h, d, a = 0, cyl = false) {
   const col = k==='barra' ? 0x8899AA : k==='encimera' ? 0x2d2d33 : k==='cajon' ? 0xCCB48A : FIN[fin];
   const g = cyl ? new THREE.CylinderGeometry(.006,.006,w/1e3,10).rotateZ(Math.PI/2) : new THREE.BoxGeometry(w/1e3,h/1e3,d/1e3);
-  const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: col, roughness: .5, metalness: cyl ? .8 : 0 }));
+  const m = new THREE.Mesh(g, mat(k, col, w, h, d));
   m.position.set(x/1e3, y/1e3, z/1e3); m.rotation.y = a; m.castShadow = m.receiveShadow = true;
-  if (!cyl) m.add(new THREE.LineSegments(new THREE.EdgesGeometry(g), new THREE.LineBasicMaterial({ color:0x5a4a38, transparent:true, opacity:.35 })));
+  if (!cyl) m.add(new THREE.LineSegments(new THREE.EdgesGeometry(g), new THREE.LineBasicMaterial({ color:0x5a4a38, transparent:true, opacity:.18 })));
   group.add(m); els.push({ k, m, s: [w, h, d], b: m.position.clone() });
 }
 // Marco local: u = a lo largo del tramo, n = fondo (frente en +n), ang = giro del tramo
@@ -140,11 +164,16 @@ function carcass(f, u, w, h, d, o = {}) {
   let y = pl + T; const dh = o.dh || 180;
   for (let i = 0; i < (o.dr || 0); i++) {
     f.box('cajon', cx, y+dh/2-5, -10, iw-26, dh-45, d-70);
-    f.box('frente', cx, y+dh/2, d/2+9, w-4, dh-4, 18); y += dh;
+    f.box('frente', cx, y+dh/2, d/2+9, w-4, dh-4, 18);
+    f.box('tirador', cx, y+dh-35, d/2+28, Math.min(160, w*.4), 10, 12); y += dh;
   }
   (o.rl || []).forEach(ry => f.rail(cx, ry, 0, iw-4));
   const n = o.dn || 0;
-  for (let i = 0; i < n; i++) f.box('puerta', u + (w/n)*(i+.5), pl+(h-pl)/2, d/2+9, w/n-3, h-pl-4, 18);
+  for (let i = 0; i < n; i++) {
+    const pw = w/n, ym = pl + (h-pl)/2;
+    f.box('puerta', u + pw*(i+.5), ym, d/2+9, pw-3, h-pl-4, 18);
+    f.box('tirador', n > 1 && i%2 ? u+pw*i+35 : u+pw*(i+1)-35, ym, d/2+28, 12, Math.min(160, (h-pl)*.3), 12);
+  }
 }
 const even = (n, from, to) => [...Array(n)].map((_, j) => from + (to-from)*(j+1)/(n+1));
 const doors = mw => Math.max(1, Math.round(mw/450));
@@ -265,7 +294,7 @@ function params() {
   });
 }
 function rebuild() {
-  tc.detach(); sel = null;
+  ptOff(); tc.detach(); sel = null;
   els.forEach(e => { group.remove(e.m); e.m.geometry.dispose(); }); els = [];
   TYPES[cur].build(P);
   $('warn').textContent = [CM, TYPES[cur].check ? TYPES[cur].check(P) : ''].filter(Boolean).join(' ');
@@ -298,15 +327,18 @@ function init() {
   scene = new THREE.Scene(); scene.background = new THREE.Color(0xf3efe8); scene.fog = new THREE.Fog(0xf3efe8, 16, 34);
   camera = new THREE.PerspectiveCamera(42, w/h, .05, 80);
   renderer = new THREE.WebGLRenderer({ antialias:true, preserveDrawingBuffer:true });
-  renderer.setSize(w, h); renderer.shadowMap.enabled = true; box.appendChild(renderer.domElement);
-  orbit = new OrbitControls(camera, renderer.domElement); orbit.enableDamping = true;
-  scene.add(new THREE.AmbientLight(0xffffff, .8));
-  const dl = new THREE.DirectionalLight(0xffffff, 1.0); dl.position.set(6,10,5); dl.castShadow = true;
-  dl.shadow.mapSize.set(2048,2048); Object.assign(dl.shadow.camera, { left:-8, right:8, top:8, bottom:-8 }); scene.add(dl);
-  const dl2 = new THREE.DirectionalLight(0xbfd0ff, .35); dl2.position.set(-5,3,-3); scene.add(dl2);
-  const fl = new THREE.Mesh(new THREE.PlaneGeometry(30,30), new THREE.MeshStandardMaterial({ color:0xe4ded3, roughness:.95 }));
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setSize(w, h);
+  renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05; box.appendChild(renderer.domElement);
+  ENV = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture; scene.environment = ENV;
+  orbit = new OrbitControls(camera, renderer.domElement); orbit.enableDamping = true; orbit.addEventListener("change", () => { if (PT) PT.updateCamera(); });
+  scene.add(new THREE.AmbientLight(0xffffff, .25));
+  const dl = new THREE.DirectionalLight(0xffffff, 2.2); dl.position.set(6,10,5); dl.castShadow = true;
+  dl.shadow.mapSize.set(4096,4096); dl.shadow.radius = 4; dl.shadow.bias = -.0004; dl.shadow.normalBias = .01; Object.assign(dl.shadow.camera, { left:-8, right:8, top:8, bottom:-8 }); scene.add(dl);
+  const dl2 = new THREE.DirectionalLight(0xbfd0ff, .5); dl2.position.set(-5,3,-3); scene.add(dl2);
+  const fl = new THREE.Mesh(new THREE.PlaneGeometry(30,30), new THREE.MeshStandardMaterial({ color:0xe9e4da, roughness:.6 }));
   fl.rotation.x = -Math.PI/2; fl.receiveShadow = true; scene.add(fl);
-  const gr = new THREE.GridHelper(24, 48, 0xcfc7b8, 0xddd6ca); gr.position.y = .001; scene.add(gr);
+  const gr = GR = new THREE.GridHelper(24, 48, 0xcfc7b8, 0xddd6ca); gr.position.y = .001; scene.add(gr);
   scene.add(group);
   tc = new TransformControls(camera, renderer.domElement);
   tc.addEventListener('dragging-changed', e => { orbit.enabled = !e.value; if (!e.value && sel && !EX) sel.b.copy(sel.m.position); }); scene.add(tc);
@@ -317,12 +349,18 @@ function init() {
     sel = hit ? els.find(x => x.m === hit.object) : null;
     sel ? tc.attach(sel.m) : tc.detach();
   });
-  (function loop() { requestAnimationFrame(loop); orbit.update(); renderer.render(scene, camera); })();
+  (function loop() {
+    requestAnimationFrame(loop); orbit.update();
+    if (PT) {
+      if (PT.samples < 300) { PT.renderSample(); $('st').textContent = `Trazado de rayos: ${Math.floor(PT.samples)}/300 muestras`; }
+      else $('st').textContent = 'Render terminado';
+    } else renderer.render(scene, camera);
+  })();
   window.addEventListener('resize', () => { const w = box.clientWidth, h = box.clientHeight; camera.aspect = w/h; camera.updateProjectionMatrix(); renderer.setSize(w, h); });
 }
 init();
 Object.keys(FIN).forEach(n => { const o = document.createElement('option'); o.textContent = n; $('fin').appendChild(o); });
-$('fin').onchange = e => { fin = e.target.value; els.forEach(x => { if (!['barra','encimera','cajon'].includes(x.k)) x.m.material.color.setHex(FIN[fin]); }); };
+$('fin').onchange = e => { fin = e.target.value; rebuild(); };
 document.querySelectorAll('[data-v]').forEach(b => b.onclick = () => view(b.dataset.v));
 $('del').onclick = () => { if (!sel) return; tc.detach(); group.remove(sel.m); els = els.filter(x => x !== sel); sel = null; summary(); };
 ready = true; setType('armario');
@@ -335,10 +373,29 @@ function applyView() {
     const c = bb.getCenter(new THREE.Vector3());
     els.forEach(e => e.m.position.copy(e.b).add(e.b.clone().sub(c).multiplyScalar(.6)));
   }
-  els.forEach(e => e.m.visible = !(HD && e.k === 'puerta'));
+  els.forEach(e => e.m.visible = !(HD && (e.k === 'puerta' || e.k === 'tirador')));
 }
-$('tgd').onclick = () => { HD = !HD; $('tgd').classList.toggle('on', HD); applyView(); };
-$('tge').onclick = () => { EX = !EX; $('tge').classList.toggle('on', EX); applyView(); };
+$('tgd').onclick = () => { ptOff(); HD = !HD; $('tgd').classList.toggle('on', HD); applyView(); };
+$('tge').onclick = () => { ptOff(); EX = !EX; $('tge').classList.toggle('on', EX); applyView(); };
+/* Trazado de rayos real en GPU (three-gpu-pathtracer, se carga bajo demanda) */
+function ptOff() {
+  if (!PT) return;
+  try { PT.dispose(); } catch (e) {}
+  PT = null; scene.environment = ENV; GR.visible = true; $('rt').classList.remove('on'); $('st').textContent = '';
+}
+$('rt').onclick = async () => {
+  if (PT) return ptOff();
+  status('Cargando el trazador de rayos…');
+  try {
+    const { WebGLPathTracer } = await import('three-gpu-pathtracer');
+    tc.detach(); sel = null; GR.visible = false; scene.environment = null;
+    PT = new WebGLPathTracer(renderer); PT.bounces = 5; PT.tiles.set(2, 2); PT.filterGlossyFactor = .5;
+    PT.setScene(scene, camera); $('rt').classList.add('on');
+  } catch (e) {
+    console.error(e); PT = null; GR.visible = true; scene.environment = ENV;
+    status('No se pudo iniciar el trazado de rayos; se mantiene el render realista.');
+  }
+};
 const KEY = 'crsd-project';
 function status(t) { $('st').textContent = t; clearTimeout(status.t); status.t = setTimeout(() => $('st').textContent = '', 3500); }
 $('save').onclick = () => { try { localStorage.setItem(KEY, JSON.stringify({ cur, P, fin })); status('Guardado solo en este navegador'); } catch (e) { status('No se pudo guardar'); } };
@@ -351,7 +408,7 @@ $('load').onclick = () => {
     CM = ''; typeButtons(); params(); rebuild(); view('iso'); status('Diseño recuperado');
   } catch (e) { status('No se pudo abrir el diseño'); }
 };
-$('png').onclick = () => { renderer.render(scene, camera); const a = document.createElement('a'); a.href = renderer.domElement.toDataURL('image/png'); a.download = 'diseno-cr-muebles.png'; a.click(); };
+$('png').onclick = () => { if (!PT) renderer.render(scene, camera); const a = document.createElement('a'); a.href = renderer.domElement.toDataURL('image/png'); a.download = 'diseno-cr-muebles.png'; a.click(); };
 
 /* ---------- Enviar diseño ---------- */
 $('send').onclick = () => $('ms').classList.add('show');
@@ -359,7 +416,7 @@ $('cs').onclick = () => $('ms').classList.remove('show');
 $('ds').onclick = () => {
   const nm = $('fn').value.trim(), ph = $('fp').value.trim();
   if (!nm || !ph) { alert('Nombre y teléfono son obligatorios'); return; }
-  renderer.render(scene, camera);
+  if (!PT) renderer.render(scene, camera);
   const t = TYPES[cur];
   const msg = `Tipo: ${t.name}\nAcabado: ${fin}\n` + t.params.map(q => `${q.l}: ${P[q.k]}`).join('\n')
     + `\n\nTablero aprox.: ${summary.area.toFixed(2)} m²\n\nDespiece:\n` + Object.entries(summary.g).map(([k,n]) => `${n}× ${k}`).join('\n')
