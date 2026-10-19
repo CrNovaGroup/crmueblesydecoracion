@@ -79,14 +79,14 @@ canvas{display:block;width:100%;height:100%}
   <div class="fr"><label class="fl">Teléfono *</label><input id="fp" type="tel" class="ni"></div>
   <div class="fr"><label class="fl">Email</label><input id="fe" type="email" class="ni"></div>
   <div class="ma"><button id="cs">Cancelar</button><button class="bp" id="ds">Enviar</button></div></div></div>
-
+ 
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/","three/examples/jsm/":"https://unpkg.com/three@0.160.0/examples/jsm/","three-mesh-bvh":"https://unpkg.com/three-mesh-bvh@0.7.6/build/index.module.js","three-mesh-bvh/":"https://unpkg.com/three-mesh-bvh@0.7.6/","three-gpu-pathtracer":"https://unpkg.com/three-gpu-pathtracer@0.0.23/build/index.module.js"}}</script>
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-
+ 
 /* ============================================================
    CR SMART DESIGN v2 — todo en milímetros.
    Para añadir un tipo de mueble propio (antes o después de cargar):
@@ -131,7 +131,7 @@ const $ = id => document.getElementById(id);
 let fin = 'Roble', cur = 'armario', P = {}, els = [], sel = null, CM = '', ready = false;
 let scene, camera, renderer, orbit, tc, EX = false, HD = false, PT = null, ENV, GR;
 const group = new THREE.Group();
-
+ 
 /* ---------- Primitivas ---------- */
 function add(k, x, y, z, w, h, d, a = 0, cyl = false) {
   const col = k==='barra' ? 0x8899AA : k==='encimera' ? 0x2d2d33 : k==='cajon' ? 0xCCB48A : FIN[fin];
@@ -177,14 +177,14 @@ function carcass(f, u, w, h, d, o = {}) {
 }
 const even = (n, from, to) => [...Array(n)].map((_, j) => from + (to-from)*(j+1)/(n+1));
 const doors = mw => Math.max(1, Math.round(mw/450));
-
+ 
 /* ---------- Registro de tipos ---------- */
 function registerType(t) {
   if (!t || !t.id || !Array.isArray(t.params) || typeof t.build !== 'function') { console.error('Tipo no válido', t); return; }
   TYPES[t.id] = t; if (ready) typeButtons();
 }
 window.CRSmartDesign = { registerType, TYPES, frame, carcass, add, T, even };
-
+ 
 registerType({ id:'armario', name:'Armario', icon:'🚪',
   params:[
     {k:'w',l:'Ancho (mm)',v:1800,min:400,max:6000,step:50},{k:'h',l:'Alto (mm)',v:2400,min:600,max:3000,step:50},
@@ -203,7 +203,7 @@ registerType({ id:'armario', name:'Armario', icon:'🚪',
       carcass(f, i*mw, mw, p.h, p.d, o);
     }
   }});
-
+ 
 registerType({ id:'vestidor', name:'Vestidor', icon:'👔',
   params:[
     {k:'f',l:'Forma (1 lineal, 2 en L, 3 en U)',v:2,min:1,max:3,step:1},
@@ -227,7 +227,7 @@ registerType({ id:'vestidor', name:'Vestidor', icon:'👔',
     if (p.f>=2) run(frame(p.d/2, p.d/2+p.L, Math.PI/2), p.L);
     if (p.f>=3) run(frame(p.w-p.d/2, p.d/2, -Math.PI/2), p.L);
   }});
-
+ 
 registerType({ id:'cocina', name:'Cocina integral', icon:'🍳',
   params:[
     {k:'L',l:'Largo de la cocina (mm)',v:3000,min:1200,max:7000,step:50},{k:'h',l:'Alto mueble bajo con encimera (mm)',v:900,min:800,max:1000,step:10},
@@ -251,7 +251,7 @@ registerType({ id:'cocina', name:'Cocina integral', icon:'🍳',
     run(frame(0,0,0), p.L, p.up);
     if (p.is) run(frame((p.L+p.il)/2, p.d+1000, Math.PI), p.il, false);
   }});
-
+ 
 registerType({ id:'libre', name:'Mueble libre', icon:'✦',
   params:[
     {k:'w',l:'Ancho (mm)',v:1200,min:300,max:4000,step:50},{k:'h',l:'Alto (mm)',v:900,min:200,max:2600,step:50},
@@ -264,7 +264,7 @@ registerType({ id:'libre', name:'Mueble libre', icon:'✦',
     for (let i = 0; i < p.m; i++)
       carcass(f, i*mw, mw, p.h, p.d, { pl:p.pl, open:p.op, dr:p.dr, dh:140, dn:p.dn ? doors(mw) : 0, sh:even(p.sh, p.pl+T, p.h-T) });
   }});
-
+ 
 /* ---------- UI ---------- */
 function typeButtons() {
   const box = $('types'); box.innerHTML = '';
@@ -320,7 +320,7 @@ function view(v) {
   const r = Math.max(s.x, s.y, s.z)*1.7 + .5, o = { front:[0,.15,1], side:[1,.15,0], top:[0,1,.01], iso:[.7,.5,.9] }[v];
   camera.position.set(c.x+o[0]*r, c.y+o[1]*r, c.z+o[2]*r); orbit.target.copy(c); orbit.update();
 }
-
+ 
 /* ---------- Escena ---------- */
 function init() {
   const box = $('cw'), w = box.clientWidth, h = box.clientHeight;
@@ -364,7 +364,7 @@ $('fin').onchange = e => { fin = e.target.value; rebuild(); };
 document.querySelectorAll('[data-v]').forEach(b => b.onclick = () => view(b.dataset.v));
 $('del').onclick = () => { if (!sel) return; tc.detach(); group.remove(sel.m); els = els.filter(x => x !== sel); sel = null; summary(); };
 ready = true; setType('armario');
-
+ 
 /* ---------- Vista, guardado e imagen ---------- */
 function applyView() {
   els.forEach(e => e.m.position.copy(e.b));
@@ -409,7 +409,7 @@ $('load').onclick = () => {
   } catch (e) { status('No se pudo abrir el diseño'); }
 };
 $('png').onclick = () => { if (!PT) renderer.render(scene, camera); const a = document.createElement('a'); a.href = renderer.domElement.toDataURL('image/png'); a.download = 'diseno-cr-muebles.png'; a.click(); };
-
+ 
 /* ---------- Enviar diseño ---------- */
 $('send').onclick = () => $('ms').classList.add('show');
 $('cs').onclick = () => $('ms').classList.remove('show');
@@ -432,7 +432,7 @@ $('ds').onclick = () => {
     setTimeout(() => { $('ms').classList.remove('show'); alert('✓ Diseño enviado'); }, 2000);
   }).catch(() => alert('No se pudo enviar el diseño. Inténtalo de nuevo.'));
 };
-
+ 
 /* ---------- PWA ---------- */
 let dp;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); dp = e; });
@@ -442,3 +442,4 @@ if ('serviceWorker' in navigator) window.addEventListener('load', () => navigato
 </script>
 </body>
 </html>
+ 
