@@ -5,23 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>CR Muebles y Decoración - Diseña tu mueble en 3D</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#c8a870">
+<meta name="theme-color" content="#f3efe8"><meta name="color-scheme" content="light">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0a0b;--sf:#111113;--sf2:#18181c;--sf3:#202026;--bd:#28282f;--bd2:#38383f;--gold:#c8a870;--tx:#eeebe5;--txm:#7a7a85;--red:#e05757;--green:#3ecf8e;--r:8px}
+:root{color-scheme:light;--bg:#f3efe8;--sf:#fbfaf7;--sf2:#ffffff;--sf3:#eee9e0;--bd:#ddd6ca;--bd2:#c6bcab;--gold:#8a5a2b;--tx:#2a2622;--txm:#6b645a;--red:#b83a2e;--green:#1f7a52;--r:8px}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font:13px 'Syne',sans-serif}
 input,select{font-family:inherit}
-#tb{position:fixed;top:0;left:0;right:0;height:54px;background:var(--bg);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:6px;padding:0 10px;z-index:100;overflow-x:auto}
+#tb{position:fixed;top:0;left:0;right:0;height:54px;background:var(--sf);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:6px;padding:0 10px;z-index:100;overflow-x:auto}
 .logo{font-size:12px;font-weight:800;letter-spacing:3px;color:var(--gold);text-transform:uppercase;white-space:nowrap;padding-right:6px}
 .sp{width:1px;height:22px;background:var(--bd);flex-shrink:0}.tsp{flex:1}
 .tg{display:flex;gap:4px;flex-shrink:0}
 .tbtn{height:32px;padding:0 12px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);color:var(--tx);cursor:pointer;font-size:11px;font-weight:700;white-space:nowrap}
 .tbtn:hover{background:var(--sf3);border-color:var(--bd2)}
 .tbtn:focus-visible,.ni:focus-visible,#fin:focus-visible{outline:2px solid var(--gold)}
-.tbtn.on{background:linear-gradient(135deg,#c8a870,#906030);border:none;color:#1a0e00;font-weight:800}
-.tbtn.danger{color:#f08080;border-color:rgba(224,87,87,.3)}
-.tbtn.ok{color:var(--green);border-color:rgba(62,207,142,.3)}
+.tbtn.on{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:800}
+.tbtn.danger{color:var(--red);border-color:#e3b3ab}
+.tbtn.ok{color:var(--green);border-color:#a9d8c2}
 #fin{height:32px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);color:var(--tx);padding:0 8px;font-size:11px}
 #sl{position:fixed;left:0;top:54px;bottom:0;width:270px;background:var(--sf);border-right:1px solid var(--bd);overflow-y:auto;z-index:90}
 #sr{position:fixed;right:0;top:54px;bottom:0;width:250px;background:var(--sf);border-left:1px solid var(--bd);overflow-y:auto;z-index:90}
@@ -31,19 +31,21 @@ canvas{display:block;width:100%;height:100%}
 .slbl{font-size:10px;font-weight:700;color:var(--txm);margin-bottom:10px}
 .fr{margin-bottom:9px}.fl{display:block;font-size:10px;color:var(--txm);margin-bottom:3px}
 .ni{width:100%;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:7px 9px;color:var(--tx);font:12px 'DM Mono',monospace}
-#warn{font-size:10px;color:#f5b042;min-height:14px;line-height:1.5}
+#warn{font-size:10px;color:#a85d00;min-height:14px;line-height:1.5}
 .vg{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 .vb{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--r);padding:8px;cursor:pointer;text-align:center;color:var(--txm);font-size:11px;font-weight:700}
 .vb:hover{color:var(--gold);background:var(--sf3)}
+.vb.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+#st{font-size:11px;color:var(--green);white-space:nowrap}
 .kv{display:flex;justify-content:space-between;font-size:11px;margin-bottom:5px}.kv b{font:500 12px 'DM Mono',monospace;color:var(--gold)}
 #pl div{font:11px 'DM Mono',monospace;color:var(--txm);padding:3px 0;border-bottom:1px solid var(--bd)}
 #pl span{color:var(--gold)}
-.mb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:200;align-items:center;justify-content:center}
+.mb{display:none;position:fixed;inset:0;background:rgba(40,32,24,.5);z-index:200;align-items:center;justify-content:center}
 .mb.show{display:flex}
 .mc2{background:var(--sf);border:1px solid var(--bd2);border-radius:16px;padding:24px;width:90%;max-width:420px}
 .mc2 h3{margin-bottom:14px}
 .ma{display:flex;gap:8px;margin-top:16px}.ma button{flex:1;padding:11px;border-radius:var(--r);border:1px solid var(--bd2);background:transparent;color:var(--txm);font-weight:700;cursor:pointer}
-.ma .bp{background:linear-gradient(135deg,#c8a870,#906030);border:none;color:#1a0e00}
+.ma .bp{background:var(--gold);border:none;color:#fff}
 @media(max-width:960px){
  #sr{display:none}#cw{left:0;right:0;bottom:42vh}
  #sl{top:auto;height:42vh;width:100%;border-right:none;border-top:1px solid var(--bd)}
@@ -55,7 +57,7 @@ canvas{display:block;width:100%;height:100%}
   <div class="logo">CR Muebles</div><div class="sp"></div>
   <div class="tg" id="types"></div><div class="tsp"></div>
   <select id="fin" aria-label="Acabado"></select>
-  <button class="tbtn" id="install-btn">📲 Instalar</button>
+  <span id="st"></span><button class="tbtn" id="save">💾 Guardar</button><button class="tbtn" id="load">📂 Abrir</button><button class="tbtn" id="png">🖼 Imagen</button><button class="tbtn" id="install-btn">📲 Instalar</button>
   <button class="tbtn danger" id="del">🗑 Quitar pieza</button>
   <button class="tbtn ok" id="send">↗ Enviar diseño</button>
 </div>
@@ -63,7 +65,8 @@ canvas{display:block;width:100%;height:100%}
   <div class="sec"><div class="slbl">Medidas y distribución</div><div id="pf"></div><div id="warn"></div></div>
   <div class="sec"><div class="slbl">Vista</div><div class="vg">
     <div class="vb" data-v="front">◀ Frontal</div><div class="vb" data-v="side">▶ Lateral</div>
-    <div class="vb" data-v="top">↑ Superior</div><div class="vb" data-v="iso">◈ Isométrica</div></div></div>
+    <div class="vb" data-v="top">↑ Superior</div><div class="vb" data-v="iso">◈ Isométrica</div>
+    <div class="vb" id="tgd">🚪 Ocultar puertas</div><div class="vb" id="tge">💥 Vista despiece</div></div></div>
 </div>
 <div id="sr">
   <div class="sec"><div class="slbl">Resumen</div><div id="sum"></div></div>
@@ -88,7 +91,7 @@ import { TransformControls } from 'three/addons/controls/TransformControls.js';
    CRSmartDesign.registerType({
      id:'bano', name:'Mueble de baño', icon:'🛁',
      params:[{k:'w',l:'Ancho (mm)',v:800,min:400,max:2000,step:10}, ...],
-     check:p=>'' /* mensaje de aviso opcional */,
+     check:p=>'' (opcional: devuelve un texto de aviso),
      build(p){ const f=CRSmartDesign.frame(0,0,0);
        CRSmartDesign.carcass(f,0,p.w,p.h,p.d,{pl:100,dr:2}); }
    });
@@ -102,7 +105,7 @@ const SHEET = new Set(['panel','balda','puerta','frente','zocalo','trasera','enc
 const TYPES = {};
 const $ = id => document.getElementById(id);
 let fin = 'Roble', cur = 'armario', P = {}, els = [], sel = null, CM = '', ready = false;
-let scene, camera, renderer, orbit, tc;
+let scene, camera, renderer, orbit, tc, EX = false, HD = false;
 const group = new THREE.Group();
 
 /* ---------- Primitivas ---------- */
@@ -111,7 +114,8 @@ function add(k, x, y, z, w, h, d, a = 0, cyl = false) {
   const g = cyl ? new THREE.CylinderGeometry(.006,.006,w/1e3,10).rotateZ(Math.PI/2) : new THREE.BoxGeometry(w/1e3,h/1e3,d/1e3);
   const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: col, roughness: .5, metalness: cyl ? .8 : 0 }));
   m.position.set(x/1e3, y/1e3, z/1e3); m.rotation.y = a; m.castShadow = m.receiveShadow = true;
-  group.add(m); els.push({ k, m, s: [w, h, d] });
+  if (!cyl) m.add(new THREE.LineSegments(new THREE.EdgesGeometry(g), new THREE.LineBasicMaterial({ color:0x5a4a38, transparent:true, opacity:.35 })));
+  group.add(m); els.push({ k, m, s: [w, h, d], b: m.position.clone() });
 }
 // Marco local: u = a lo largo del tramo, n = fondo (frente en +n), ang = giro del tramo
 function frame(ox, oz, ang = 0) {
@@ -268,6 +272,7 @@ function rebuild() {
   summary();
 }
 function summary() {
+  els.forEach(e => e.m.position.copy(e.b));
   let area = 0; const g = {};
   els.forEach(e => {
     const [w,h,d] = e.s;
@@ -278,7 +283,7 @@ function summary() {
   $('sum').innerHTML = els.length
     ? `<div class="kv">Piezas<b>${els.length}</b></div><div class="kv">Tablero<b>${area.toFixed(2)} m²</b></div><div class="kv">Ancho<b>${Math.round(s.x*1e3)} mm</b></div><div class="kv">Alto<b>${Math.round(s.y*1e3)} mm</b></div><div class="kv">Fondo<b>${Math.round(s.z*1e3)} mm</b></div>` : '';
   $('pl').innerHTML = Object.entries(g).map(([k,n]) => `<div><span>${n}×</span> ${k}</div>`).join('');
-  summary.g = g; summary.area = area;
+  summary.g = g; summary.area = area; applyView();
 }
 function view(v) {
   if (!els.length) return;
@@ -290,25 +295,25 @@ function view(v) {
 /* ---------- Escena ---------- */
 function init() {
   const box = $('cw'), w = box.clientWidth, h = box.clientHeight;
-  scene = new THREE.Scene(); scene.background = new THREE.Color(0x0a0a0b); scene.fog = new THREE.Fog(0x0a0a0b, 16, 34);
+  scene = new THREE.Scene(); scene.background = new THREE.Color(0xf3efe8); scene.fog = new THREE.Fog(0xf3efe8, 16, 34);
   camera = new THREE.PerspectiveCamera(42, w/h, .05, 80);
   renderer = new THREE.WebGLRenderer({ antialias:true, preserveDrawingBuffer:true });
   renderer.setSize(w, h); renderer.shadowMap.enabled = true; box.appendChild(renderer.domElement);
   orbit = new OrbitControls(camera, renderer.domElement); orbit.enableDamping = true;
-  scene.add(new THREE.AmbientLight(0x504844, .9));
-  const dl = new THREE.DirectionalLight(0xfff5e8, 1.35); dl.position.set(6,10,5); dl.castShadow = true;
+  scene.add(new THREE.AmbientLight(0xffffff, .8));
+  const dl = new THREE.DirectionalLight(0xffffff, 1.0); dl.position.set(6,10,5); dl.castShadow = true;
   dl.shadow.mapSize.set(2048,2048); Object.assign(dl.shadow.camera, { left:-8, right:8, top:8, bottom:-8 }); scene.add(dl);
-  const dl2 = new THREE.DirectionalLight(0x8090c0, .3); dl2.position.set(-5,3,-3); scene.add(dl2);
-  const fl = new THREE.Mesh(new THREE.PlaneGeometry(30,30), new THREE.MeshStandardMaterial({ color:0x111113, roughness:.95 }));
+  const dl2 = new THREE.DirectionalLight(0xbfd0ff, .35); dl2.position.set(-5,3,-3); scene.add(dl2);
+  const fl = new THREE.Mesh(new THREE.PlaneGeometry(30,30), new THREE.MeshStandardMaterial({ color:0xe4ded3, roughness:.95 }));
   fl.rotation.x = -Math.PI/2; fl.receiveShadow = true; scene.add(fl);
-  const gr = new THREE.GridHelper(24, 48, 0x1c1c22, 0x141418); gr.position.y = .001; scene.add(gr);
+  const gr = new THREE.GridHelper(24, 48, 0xcfc7b8, 0xddd6ca); gr.position.y = .001; scene.add(gr);
   scene.add(group);
   tc = new TransformControls(camera, renderer.domElement);
-  tc.addEventListener('dragging-changed', e => orbit.enabled = !e.value); scene.add(tc);
+  tc.addEventListener('dragging-changed', e => { orbit.enabled = !e.value; if (!e.value && sel && !EX) sel.b.copy(sel.m.position); }); scene.add(tc);
   renderer.domElement.addEventListener('click', e => {
     const r = renderer.domElement.getBoundingClientRect(), rc = new THREE.Raycaster();
     rc.setFromCamera(new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1, -((e.clientY-r.top)/r.height)*2+1), camera);
-    const hit = rc.intersectObjects(els.map(x => x.m))[0];
+    const hit = rc.intersectObjects(els.map(x => x.m), false)[0];
     sel = hit ? els.find(x => x.m === hit.object) : null;
     sel ? tc.attach(sel.m) : tc.detach();
   });
@@ -321,6 +326,32 @@ $('fin').onchange = e => { fin = e.target.value; els.forEach(x => { if (!['barra
 document.querySelectorAll('[data-v]').forEach(b => b.onclick = () => view(b.dataset.v));
 $('del').onclick = () => { if (!sel) return; tc.detach(); group.remove(sel.m); els = els.filter(x => x !== sel); sel = null; summary(); };
 ready = true; setType('armario');
+
+/* ---------- Vista, guardado e imagen ---------- */
+function applyView() {
+  els.forEach(e => e.m.position.copy(e.b));
+  if (EX && els.length) {
+    const bb = new THREE.Box3(); els.forEach(e => bb.expandByPoint(e.b));
+    const c = bb.getCenter(new THREE.Vector3());
+    els.forEach(e => e.m.position.copy(e.b).add(e.b.clone().sub(c).multiplyScalar(.6)));
+  }
+  els.forEach(e => e.m.visible = !(HD && e.k === 'puerta'));
+}
+$('tgd').onclick = () => { HD = !HD; $('tgd').classList.toggle('on', HD); applyView(); };
+$('tge').onclick = () => { EX = !EX; $('tge').classList.toggle('on', EX); applyView(); };
+const KEY = 'crsd-project';
+function status(t) { $('st').textContent = t; clearTimeout(status.t); status.t = setTimeout(() => $('st').textContent = '', 3500); }
+$('save').onclick = () => { try { localStorage.setItem(KEY, JSON.stringify({ cur, P, fin })); status('Guardado solo en este navegador'); } catch (e) { status('No se pudo guardar'); } };
+$('load').onclick = () => {
+  try {
+    const d = JSON.parse(localStorage.getItem(KEY));
+    if (!d || !TYPES[d.cur]) return status('No hay ningún diseño guardado');
+    cur = d.cur; fin = FIN[d.fin] ? d.fin : 'Roble'; $('fin').value = fin; P = {};
+    TYPES[cur].params.forEach(q => { const v = d.P[q.k]; P[q.k] = typeof v === 'number' ? Math.min(q.max, Math.max(q.min, v)) : q.v; });
+    CM = ''; typeButtons(); params(); rebuild(); view('iso'); status('Diseño recuperado');
+  } catch (e) { status('No se pudo abrir el diseño'); }
+};
+$('png').onclick = () => { renderer.render(scene, camera); const a = document.createElement('a'); a.href = renderer.domElement.toDataURL('image/png'); a.download = 'diseno-cr-muebles.png'; a.click(); };
 
 /* ---------- Enviar diseño ---------- */
 $('send').onclick = () => $('ms').classList.add('show');
